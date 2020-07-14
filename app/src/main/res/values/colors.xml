@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#63B3EF</color>
+    <color name="colorPrimaryNight">#636363</color>
+    <color name="colorPrimaryDark">@android:color/white</color> <!--状态栏-->
+    <color name="colorAccent">@color/colorPrimary</color><!--输入框-->
+    <color name="hintColor">#C8C7C7</color>
+    <color name="darkGray">#636363</color>
+</resources>

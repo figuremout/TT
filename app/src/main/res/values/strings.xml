@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">tt</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">User Name</string>
+    <string name="nav_header_subtitle">User Email</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="menu_settings">Settings</string>
+    <string name="version">v1.2.0 Alpha</string>
+    <!--
+        v1.0.0 Alpha 2020.07.08 == 创建项目
+        v1.0.1 Alpha 2020.07.10 == 实现点击头像跳转到登录界面
+        v1.1.0 Alpha 2020.07.11 == 完成登录界面原型
+        v1.2.0 Alpha 2020.07.11 == 完成点击实现登录和注册界面切换功能
+                                == 设计logo，并放在启动界面和登录、注册界面
+                                == 美化UI，如隐藏状态栏等
+        v1.2.1 Alpha 2020.07.12 == 完成设置界面
+                                == 实现切换主题功能
+
+    -->
+    <string name="loginbutton">LoginButton</string>
+</resources>
