@@ -74,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
                 // 跳转网页
                 Intent intent= new Intent();
                 intent.setAction("android.intent.action.VIEW");
-                Uri content_url = Uri.parse("https://github.com/githubzjm/MyNote");
+                Uri content_url = Uri.parse("https://github.com/githubzjm/TT");
                 intent.setData(content_url);
                 startActivity(intent);
             }
