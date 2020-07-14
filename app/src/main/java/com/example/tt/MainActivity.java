@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
         mTencent = Tencent.createInstance("222222", this.getApplicationContext());
         // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-        // 初始化视图
     }
 
     // 右上三点菜单栏
@@ -177,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(Tag, "Stop");
     }
 
+
+    /**
+     * share with qq friends
+     */
     private class BaseUiListener implements IUiListener {
         @Override
         public void onComplete(Object response) {
@@ -212,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doShareToQQ() {
-        Log.d(Tag, "start share");
         final Bundle params = new Bundle();
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         params.putString(QQShare.SHARE_TO_QQ_TITLE, "标题");// 标题
@@ -220,11 +222,9 @@ public class MainActivity extends AppCompatActivity {
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"http://www.qq.com/news/1.html");// 内容地址
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");// 网络图片地址　　params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
         params.putString(QQShare.SHARE_TO_QQ_EXT_INT, "其它附加功能");
-        Log.d(Tag, "doShareToQQ");
         // 分享操作要在主线程中完成
         if(null != mTencent){
             mTencent.shareToQQ(MainActivity.this, params, shareListener);
-            Log.d(Tag, "not null");
         }
 
     }
