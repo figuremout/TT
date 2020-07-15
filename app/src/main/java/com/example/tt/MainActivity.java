@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.parseColor("#63B3EF"));
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-//        // toolbar，布局在fragment_gallery.xml
+        // toolbar，布局在fragment_gallery.xml
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(Tag, "create done");
     }
 
-    // 右上三点菜单栏
+    // 初始化菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(Tag, "onCreateOptions menu");
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(Tag, "onCreateOptions menu done");
         return true;
     }
+    // 菜单项监听
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(Tag, "onOptionsItemSelected");
@@ -224,12 +225,15 @@ public class MainActivity extends AppCompatActivity {
     private void doShareToQQ() {
         final Bundle params = new Bundle();
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-        params.putString(QQShare.SHARE_TO_QQ_TITLE, "标题");// 标题
+        params.putString(QQShare.SHARE_TO_QQ_TITLE, "Test: Share to QQ Zone");// 标题
         params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "别人的app，不行。我们的app，行！");// 摘要
         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"https://github.com/githubzjm/TT");// 内容地址
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");// 网络图片地址　　
         // params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
-        params.putString(QQShare.SHARE_TO_QQ_EXT_INT, "其它附加功能");
+//        分享额外选项，两种类型可选（默认是不隐藏分享到QZone按钮且不自动打开分享到QZone的对话框）：
+//        QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN，分享时自动打开分享到QZone的对话框。
+//        QQShare.SHARE_TO_QQ_FLAG_QZONE_ITEM_HIDE，分享时隐藏分享到QZone按钮
+        params.putInt(QQShare.SHARE_TO_QQ_EXT_INT, QQShare.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
         // 分享操作要在主线程中完成
         if(null != mTencent){
             mTencent.shareToQQ(MainActivity.this, params, shareListener);
