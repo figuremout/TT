@@ -1,4 +1,4 @@
-# TT (TickTock)
+# <p style="color:#63B3EF">TT (TickTock)</p>
 > My first android app.
 > > An android time-manager for minimalist.
 
