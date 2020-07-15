@@ -18,15 +18,15 @@ The source code is free to modify / use, but with no liability & warranty (accor
 |||
 
 ## TODO List [#](#)
-1. 
+- [ ] Realize QQ-Login
 
 ## Intro [#](#)
 ### Language
-- 中文
+- ??
 - English
 ### Function
->f
-![](./../img/android_Activity生命周期.png)
+1. Login & Register
+2. Share this app with your friends in QQ.
 
 ## Note [#](#)
 1. Add click event on a clickable thing
@@ -61,3 +61,4 @@ The source code is free to modify / use, but with no liability & warranty (accor
     register_username.setAnimation(AnimationUtils.makeInAnimation(this,false));
 ```
 10. Generate APK: [Blog](https://www.cnblogs.com/lsdb/p/9337342.html)
+11. Share app with QQ friends (based on QQ opensdk): [myBlog](https://blog.csdn.net/qq_43536897/article/details/107344431) 

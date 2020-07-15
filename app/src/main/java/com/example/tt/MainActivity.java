@@ -90,29 +90,15 @@ public class MainActivity extends AppCompatActivity {
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
         mTencent = Tencent.createInstance("222222", this.getApplicationContext());
         // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
+        Log.d(Tag, "create done");
     }
 
     // 右上三点菜单栏
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(Tag, "onCreateOptions menu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_share:
-                Toast.makeText(MainActivity.this, "click settings", Toast.LENGTH_SHORT).show();
-
-                doShareToQQ();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
         // goto login page
         ImageButton login_img = findViewById(R.id.loginImg);
         login_img.setOnClickListener(new View.OnClickListener(){
@@ -140,6 +126,27 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Log.d(Tag, "onCreateOptions menu done");
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d(Tag, "onOptionsItemSelected");
+        switch (item.getItemId()){
+            case R.id.action_share:
+                Toast.makeText(MainActivity.this, "click settings", Toast.LENGTH_SHORT).show();
+                doShareToQQ();
+                break;
+        }
+        Log.d(Tag, "onOptionsItemSelected done");
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.d(Tag, "onSupportNavigateUp");
+
+        Log.d(Tag, "onSupportNavigateUp done");
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -218,9 +225,10 @@ public class MainActivity extends AppCompatActivity {
         final Bundle params = new Bundle();
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         params.putString(QQShare.SHARE_TO_QQ_TITLE, "标题");// 标题
-        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "要分享的摘要");// 摘要
-        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"http://www.qq.com/news/1.html");// 内容地址
-        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");// 网络图片地址　　params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
+        params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "别人的app，不行。我们的app，行！");// 摘要
+        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"https://github.com/githubzjm/TT");// 内容地址
+        params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");// 网络图片地址　　
+        // params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "应用名称");// 应用名称
         params.putString(QQShare.SHARE_TO_QQ_EXT_INT, "其它附加功能");
         // 分享操作要在主线程中完成
         if(null != mTencent){
