@@ -22,7 +22,7 @@ The source code is free to modify / use, but with no liability & warranty (accor
 
 ## Intro [#](#)
 ### Language
-- ÖÐÎÄ
+- ä¸­æ–‡
 - English
 ### Function
 1. Login & Register
