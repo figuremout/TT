@@ -1,12 +1,12 @@
-# <p style="color:#63B3EF">TT (TickTock)</p>
+# TT (TickTock)
 > My first android app.
 > > An android time-manager for minimalist.
 
 This App is **For Learn & Communication Purposes Only**.
 
 ## Open Source [#](#)
-The source code is free to modify / use, but with no liability & warranty (according to MIT License).
-- Android Studio Project: [GitHub Repo]()
+Under MIT License.
+- Android Studio Project: [GitHub Repo](https://github.com/githubzjm/TT)
 
 ## Download APK [#](#)
 - Android 5.0 (Lollipop) +
@@ -14,19 +14,11 @@ The source code is free to modify / use, but with no liability & warranty (accor
 
 |Type|Version|Time|Description|
 |--|--|--|--|
-|Debug|[v1.2.1 (Alpha)]()|*2020.07.12*|*|
+|Debug|[v1.1.0 (Alpha)](./TT_debug1.1.0.apk)|*2020.07.16*|*|
 |||
 
 ## TODO List [#](#)
-- [ ] Realize QQ-Login
-
-## Intro [#](#)
-### Language
-- 中文
-- English
-### Function
-1. Login & Register
-2. Share this app with your friends in QQ.
+- [ ] Login & Register
 
 ## Note [#](#)
 1. Add click event on a clickable thing

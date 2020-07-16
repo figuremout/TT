@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
-
+    private ImageButton back;
+    private Switch darkTheme_switch,teenager_switch;
+    private Button github,customer_service;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,17 +32,25 @@ public class SettingsActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
+        initView();
+        initEvent();
+    }
+    private void initView(){
+        back = findViewById(R.id.imageButton3);
+        darkTheme_switch = findViewById(R.id.switch2);
+        teenager_switch = findViewById(R.id.switch1);
+        github = findViewById(R.id.button4);
+        customer_service = findViewById(R.id.button5);
+    }
+    private void initEvent(){
         // 返回按钮
-        ImageButton back = findViewById(R.id.imageButton3);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
         // dark theme switch
-        Switch darkTheme_switch = findViewById(R.id.switch2);
         darkTheme_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -51,9 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
         // teenager mode switch
-        Switch teenager_switch = findViewById(R.id.switch1);
         teenager_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -64,9 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
         // github button
-        Button github = findViewById(R.id.button4);
         github.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,9 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         // customer service button
-        Button customer_service = findViewById(R.id.button5);
         customer_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private TextView register,signin,back_1,back_2;
+    private EditText login_email, login_pwd, register_name, register_email, register_pwd;
+    private Button login_button,register_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +29,27 @@ public class LoginActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
+        initView();
+        initEvent();
+    }
+    private void initView(){
+        register = findViewById(R.id.textView5);
+        signin = findViewById(R.id.textView2);
+        back_1 = findViewById(R.id.textView7);
+        back_2 = findViewById(R.id.textView8);
+
+        // EditText
+        login_email = findViewById(R.id.editTextTextEmailAddress);
+        login_pwd = findViewById(R.id.editTextTextPassword);
+        register_name = findViewById(R.id.editTextTextPersonName);
+        register_email = findViewById(R.id.editTextTextEmailAddress2);
+        register_pwd = findViewById(R.id.editTextTextPassword2);
+
+        login_button = findViewById(R.id.button);
+        register_button = findViewById(R.id.button2);
+    }
+    private void initEvent(){
         // register clickable textview
-        TextView register = findViewById(R.id.textView5);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // signin clickable textview
-        TextView signin = findViewById(R.id.textView2);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,14 +66,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // back clickable textview x2
-        TextView back_1 = findViewById(R.id.textView7);
         back_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        TextView back_2 = findViewById(R.id.textView8);
         back_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,22 +79,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // EditText
-        final EditText login_email, login_pwd, register_name, register_email, register_pwd;
-        login_email = findViewById(R.id.editTextTextEmailAddress);
-        login_pwd = findViewById(R.id.editTextTextPassword);
-        register_name = findViewById(R.id.editTextTextPersonName);
-        register_email = findViewById(R.id.editTextTextEmailAddress2);
-        register_pwd = findViewById(R.id.editTextTextPassword2);
-
         // login button
-        Button login_button = findViewById(R.id.button);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = login_email.getText().toString();
                 String pwd = login_pwd.getText().toString();
-
                 if(email.trim().length()==0){
                     login_email.setError("Email can't be empty!");
                     return;
@@ -90,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // register button
-        Button register_button = findViewById(R.id.button2);
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,9 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Register Successfully!", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
     public void switch_to_register(){
         // email out
         EditText login_email = findViewById(R.id.editTextTextEmailAddress);
