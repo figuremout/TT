@@ -10,4 +10,16 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_gallery">Gallery</string>
     <string name="loginbutton">LoginButton</string>
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+    <string name="loginButtonText">LOGIN</string>
+    <string name="registerSwitcherText">Register</string>
+    <string name="backText">Back</string>
+    <string name="sign_inSwitcher">Sign in</string>
+    <string name="usernameHint">Username</string>
+    <string name="registerButtonText">Register</string>
+    <string name="copyrightText">© 2020 Zhao Jiaming</string>
+    <string name="logoDescription">logo</string>
+    <string name="settings_back_description">close settings</string>
+    <string name="settings_title">Settings</string>
 </resources>

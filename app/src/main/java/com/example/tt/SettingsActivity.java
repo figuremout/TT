@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -36,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         initEvent();
     }
     private void initView(){
-        back = findViewById(R.id.imageButton3);
+        back = findViewById(R.id.settings_back);
         darkTheme_switch = findViewById(R.id.switch2);
         teenager_switch = findViewById(R.id.switch1);
         github = findViewById(R.id.button4);

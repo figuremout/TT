@@ -1,3 +1,23 @@
+<script>
+    function is_qq(){
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/QQ/i) == "qq") {
+        return true;
+        }
+        return false;
+    }
+    window.onload = function(){
+        let apk_link = document.querySelector("td a");
+        apk_link.onclick = function(){
+            if(is_qq()){
+                alert("Alert: 检测到当前使用的是QQ内置浏览器。\n为避免被重定向，APK下载链接已失活处理，请通过其他手机浏览器打开！");
+                apk_link.href = "#";
+                apk_link.innerText = "Inactive Link";
+            }
+        }
+    }
+</script>
+
 # TT (TickTock)
 > My first android app.
 > > An android time-manager for minimalist.

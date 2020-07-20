@@ -24,6 +24,7 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
         params.putString(QQShare.SHARE_TO_QQ_TITLE, "测试：分享到QQ空间");// 标题
         params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "别人的app，不行。我们的app，行！");// 摘要
-        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"https://github.com/githubzjm/TT");// 内容地址
+        params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,"http://www.zjmpage.com/TT/README.html");// 内容地址
         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL,"http://b182.photo.store.qq.com/psb?/V11Upd1r0SLvmz/UvLQ.j9dYQWZR9scwprHiOB3UQh1t6EB59JnpeBDY64!/b/dLYAAAAAAAAA&bo=iAGWAQAAAAARFz4!&rf=viewer_4");// 网络图片地址　　
          params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "TickTock");// 应用名称
 //        分享额外选项，两种类型可选（默认是不隐藏分享到QZone按钮且不自动打开分享到QZone的对话框）：

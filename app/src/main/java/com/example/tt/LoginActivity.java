@@ -33,20 +33,20 @@ public class LoginActivity extends AppCompatActivity {
         initEvent();
     }
     private void initView(){
-        register = findViewById(R.id.textView5);
-        signin = findViewById(R.id.textView2);
-        back_1 = findViewById(R.id.textView7);
-        back_2 = findViewById(R.id.textView8);
+        register = findViewById(R.id.switchToRegister);
+        signin = findViewById(R.id.switchToLogin);
+        back_1 = findViewById(R.id.finishLogin);
+        back_2 = findViewById(R.id.finishRegister);
 
         // EditText
-        login_email = findViewById(R.id.editTextTextEmailAddress);
-        login_pwd = findViewById(R.id.editTextTextPassword);
-        register_name = findViewById(R.id.editTextTextPersonName);
-        register_email = findViewById(R.id.editTextTextEmailAddress2);
-        register_pwd = findViewById(R.id.editTextTextPassword2);
+        login_email = findViewById(R.id.login_email);
+        login_pwd = findViewById(R.id.login_pwd);
+        register_name = findViewById(R.id.register_username);
+        register_email = findViewById(R.id.register_email);
+        register_pwd = findViewById(R.id.register_pwd);
 
-        login_button = findViewById(R.id.button);
-        register_button = findViewById(R.id.button2);
+        login_button = findViewById(R.id.login_button);
+        register_button = findViewById(R.id.register_button);
     }
     private void initEvent(){
         // register clickable textview
@@ -123,113 +123,113 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void switch_to_register(){
         // email out
-        EditText login_email = findViewById(R.id.editTextTextEmailAddress);
+        EditText login_email = findViewById(R.id.login_email);
         login_email.setVisibility(View.GONE);
 //        login_email.setAnimation(AnimationUtils.makeOutAnimation(this,false));
 
         // password out
-        EditText login_password = findViewById(R.id.editTextTextPassword);
+        EditText login_password = findViewById(R.id.login_pwd);
         login_password.setVisibility(View.GONE);
 //        login_password.setAnimation(AnimationUtils.makeOutAnimation(this, false));
 
         // login button out
-        Button login_button = findViewById(R.id.button);
+        Button login_button = findViewById(R.id.login_button);
         login_button.setVisibility(View.GONE);
 //        login_button.setAnimation(AnimationUtils.makeOutAnimation(this, false));
 
         // register clickable text out
-        TextView register = findViewById(R.id.textView5);
+        TextView register = findViewById(R.id.switchToRegister);
         register.setVisibility(View.GONE);
 //        register.setAnimation(AnimationUtils.makeOutAnimation(this, false));
 
         // back clickable text out
-        TextView back_1 = findViewById(R.id.textView7);
+        TextView back_1 = findViewById(R.id.finishLogin);
         back_1.setVisibility(View.GONE);
 
         // username in
-        EditText register_username = findViewById(R.id.editTextTextPersonName);
+        EditText register_username = findViewById(R.id.register_username);
         register_username.setVisibility(View.VISIBLE);
         register_username.setAnimation(AnimationUtils.makeInAnimation(this,false));
 
         // email in
-        EditText register_email = findViewById(R.id.editTextTextEmailAddress2);
+        EditText register_email = findViewById(R.id.register_email);
         register_email.setVisibility(View.VISIBLE);
         register_email.setAnimation(AnimationUtils.makeInAnimation(this,false));
 
         // password in
-        EditText register_password = findViewById(R.id.editTextTextPassword2);
+        EditText register_password = findViewById(R.id.register_pwd);
         register_password.setVisibility(View.VISIBLE);
         register_password.setAnimation(AnimationUtils.makeInAnimation(this,false));
 
         // register button in
-        Button register_button = findViewById(R.id.button2);
+        Button register_button = findViewById(R.id.register_button);
         register_button.setVisibility(View.VISIBLE);
         register_button.setAnimation(AnimationUtils.makeInAnimation(this,false));
 
         // signin clickable text in
-        TextView signin = findViewById(R.id.textView2);
+        TextView signin = findViewById(R.id.switchToLogin);
         signin.setVisibility(View.VISIBLE);
         signin.setAnimation(AnimationUtils.makeInAnimation(this, false));
 
         // back clickable text in
-        TextView back_2 = findViewById(R.id.textView8);
+        TextView back_2 = findViewById(R.id.finishRegister);
         back_2.setVisibility(View.VISIBLE);
         back_2.setAnimation(AnimationUtils.makeInAnimation(this, false));
     }
 
     public void switch_to_signin(){
         // email in
-        EditText login_email = findViewById(R.id.editTextTextEmailAddress);
+        EditText login_email = findViewById(R.id.login_email);
         login_email.setVisibility(View.VISIBLE);
         login_email.setAnimation(AnimationUtils.makeInAnimation(this,true));
 
         // password in
-        EditText login_password = findViewById(R.id.editTextTextPassword);
+        EditText login_password = findViewById(R.id.login_pwd);
         login_password.setVisibility(View.VISIBLE);
         login_password.setAnimation(AnimationUtils.makeInAnimation(this, true));
 
         // login button in
-        Button login_button = findViewById(R.id.button);
+        Button login_button = findViewById(R.id.login_button);
         login_button.setVisibility(View.VISIBLE);
         login_button.setAnimation(AnimationUtils.makeInAnimation(this, true));
 
         // register clickable text in
-        TextView register = findViewById(R.id.textView5);
+        TextView register = findViewById(R.id.switchToRegister);
         register.setVisibility(View.VISIBLE);
         register.setAnimation(AnimationUtils.makeInAnimation(this, true));
 
         // back clickable text in
-        TextView back_1 = findViewById(R.id.textView7);
+        TextView back_1 = findViewById(R.id.finishLogin);
         back_1.setVisibility(View.VISIBLE);
         back_1.setAnimation(AnimationUtils.makeInAnimation(this, true));
 
         // username out
-        EditText register_username = findViewById(R.id.editTextTextPersonName);
+        EditText register_username = findViewById(R.id.register_username);
         register_username.setVisibility(View.GONE);
 //        register_username.setAnimation(AnimationUtils.makeOutAnimation(this,true));
 
         // email out
-        EditText register_email = findViewById(R.id.editTextTextEmailAddress2);
+        EditText register_email = findViewById(R.id.register_email);
         register_email.setVisibility(View.GONE);
 //        register_email.setAnimation(AnimationUtils.makeOutAnimation(this,true));
 
         // password out
-        EditText register_password = findViewById(R.id.editTextTextPassword2);
+        EditText register_password = findViewById(R.id.register_pwd);
         register_password.setVisibility(View.GONE);
 //        register_password.setAnimation(AnimationUtils.makeOutAnimation(this,true));
 
         // register button out
-        Button register_button = findViewById(R.id.button2);
+        Button register_button = findViewById(R.id.register_button);
         register_button.setVisibility(View.GONE);
 //        register_button.setAnimation(AnimationUtils.makeOutAnimation(this,true));
 
         // signin clickable text out
-        TextView signin = findViewById(R.id.textView2);
+        TextView signin = findViewById(R.id.switchToLogin);
         signin.setVisibility(View.GONE);
 //        signin.setAnimation(AnimationUtils.makeOutAnimation(this, true));
 
         // back clickable text out
-        TextView back_2 = findViewById(R.id.textView8);
+        TextView back_2 = findViewById(R.id.finishRegister);
         back_2.setVisibility(View.GONE);
 
     }
