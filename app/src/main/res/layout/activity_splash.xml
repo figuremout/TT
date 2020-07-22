@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline10"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo_text" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline10"

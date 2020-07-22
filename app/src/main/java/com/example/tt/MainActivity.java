@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageButton settings_img;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     // 需要在登录后改变的控件
     public static Button login_button;
     public static TextView username_show, email_show;
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        editor = preferences.edit();
     }
     private void initEvent(){
         // add button
@@ -155,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         Log.d(Tag, "onCreateOptions menu done");
+        // 保持登录状态
         keep_login();
         return true;
     }
@@ -263,14 +268,12 @@ public class MainActivity extends AppCompatActivity {
      */
     private void keep_login(){
         // 判断是否已登录
-        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
         String currentEmail = preferences.getString("currentEmail", "");
         if(currentEmail.trim().length()==0){
             // 还未登录，无事发生
         }else{
             after_login(currentEmail);
         }
-        SharedPreferences.Editor editor = preferences.edit();
         Log.d(Tag, "create done");
     }
 
@@ -282,7 +285,6 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.login_button.setVisibility(View.INVISIBLE);
         MainActivity.username_show.setVisibility(View.VISIBLE);
         MainActivity.email_show.setVisibility(View.VISIBLE);
-        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
         String username = preferences.getString(email+"#username", "");
         MainActivity.username_show.setText(username);
         MainActivity.email_show.setText(email);

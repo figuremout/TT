@@ -24,12 +24,15 @@ public class LoginActivity extends AppCompatActivity {
     private TextView register,signin,back_1,back_2;
     private EditText login_email, login_pwd, register_name, register_email, register_pwd;
     private Button login_button,register_button;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().hide();//隐藏标题栏
+        //隐藏标题栏
+        getSupportActionBar().hide();
         // 设置状态栏透明
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -54,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
         login_button = findViewById(R.id.login_button);
         register_button = findViewById(R.id.register_button);
+
+        preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        editor = preferences.edit();
     }
     private void initEvent(){
         // register clickable textview
@@ -102,9 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 // 判断邮箱是否已存在
-                SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
                 String is_exist = preferences.getString(email+"#username", "");
-                SharedPreferences.Editor editor = preferences.edit();
                 if(is_exist.trim().length()==0){
                     login_email.setError("Account not exist!");
                     return;
@@ -113,8 +117,8 @@ public class LoginActivity extends AppCompatActivity {
                     String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                     boolean is_mail = Pattern.matches(email_pattern, email);
                     if(!is_mail){
-                        register_email.setError("Email address is illegal!");
-                        register_email.setText("");
+                        login_email.setError("Email address is illegal!");
+                        login_email.setText("");
                         return;
                     }
                     String correct_pwd = preferences.getString(email+"#pwd", "");
@@ -127,6 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                         // 执行登录后的改变
                         after_login(email);
                         finish();
+                    }else{
+                        login_pwd.setError("Wrong password!");
                     }
                 }
             }
@@ -153,8 +159,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
                 // 判断邮箱是否已注册
                 String is_exist = preferences.getString(email+"#username", "");
                 if(is_exist.trim().length()==0){
@@ -171,6 +175,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(email+"#pwd", pwd);
                     editor.apply();
                     Toast.makeText(LoginActivity.this, "Register Successfully!", Toast.LENGTH_SHORT).show();
+
+                    // 自动填充信息到登录界面
                     switch_to_signin();
                     login_email.setText(email);
                     login_pwd.setText(pwd);
@@ -304,7 +310,6 @@ public class LoginActivity extends AppCompatActivity {
         MainActivity.login_button.setVisibility(View.INVISIBLE);
         MainActivity.username_show.setVisibility(View.VISIBLE);
         MainActivity.email_show.setVisibility(View.VISIBLE);
-        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
         String username = preferences.getString(email+"#username", "");
         MainActivity.username_show.setText(username);
         MainActivity.email_show.setText(email);

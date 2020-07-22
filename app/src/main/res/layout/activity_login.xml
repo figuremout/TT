@@ -83,17 +83,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:alpha="@dimen/inputAlpha"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/emailHint"
-        android:inputType="textWebEmailAddress"
+        android:inputType="textEmailAddress"
         android:textColorHighlight="@color/colorPrimary"
         android:textColorHint="@color/hintColor"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        android:autofillHints="" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <EditText
         android:id="@+id/login_pwd"
@@ -272,5 +272,5 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline13"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/logo_text" />
 </androidx.constraintlayout.widget.ConstraintLayout>

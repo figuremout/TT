@@ -22,4 +22,5 @@
     <string name="logoDescription">logo</string>
     <string name="settings_back_description">close settings</string>
     <string name="settings_title">Settings</string>
+    <string name="profile_back_description">close profile</string>
 </resources>
