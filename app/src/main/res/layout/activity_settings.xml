@@ -7,7 +7,7 @@
     tools:context=".SettingsActivity">
 
     <ImageButton
-        android:id="@+id/settings_back"
+        android:id="@+id/profile_back"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -26,7 +26,7 @@
         android:textColor="@color/darkGray"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline29"
-        app:layout_constraintStart_toEndOf="@+id/settings_back"
+        app:layout_constraintStart_toEndOf="@+id/profile_back"
         app:layout_constraintTop_toTopOf="@+id/guideline25" />
 
     <TextView

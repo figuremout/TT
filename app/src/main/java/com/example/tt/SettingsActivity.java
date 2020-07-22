@@ -35,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         initEvent();
     }
     private void initView(){
-        back = findViewById(R.id.settings_back);
+        back = findViewById(R.id.profile_back);
         darkTheme_switch = findViewById(R.id.switch2);
         teenager_switch = findViewById(R.id.switch1);
         github = findViewById(R.id.button4);

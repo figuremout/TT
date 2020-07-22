@@ -1,6 +1,7 @@
 package com.example.tt;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -12,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +36,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONObject;
+import com.example.tt.LoginActivity.*;
 
+/**
+ * email#username
+ * email#pwd
+ * currentEmail
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -44,8 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ImageButton login_img, settings_img;
-    private Button login_button;
+    private ImageButton settings_img;
+    // 需要在登录后改变的控件
+    public static Button login_button;
+    public static TextView username_show, email_show;
+    public static ImageButton login_img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
         // 设置状态栏颜色 有用
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);//添加Flag把状态栏设为可绘制模式
-        window.setStatusBarColor(Color.parseColor("#63B3EF"));
+        window.setStatusBarColor(Color.parseColor("#6699FF"));
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
+        // 初始化控件
         initView();
         initEvent();
 
@@ -79,10 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
-        mTencent = Tencent.createInstance("1110702464", this.getApplicationContext());
         // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-        Log.d(Tag, "create done");
+        mTencent = Tencent.createInstance("1110702464", this.getApplicationContext());
+
     }
+
     private void initView(){
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -101,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // 初始化菜单
+    // 初始化左侧滑菜单
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(Tag, "onCreateOptions menu");
@@ -109,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         {/**
          * 菜单渲染完成后找到菜单上按钮并添加事件
+         * 菜单上的控件必须在这里初始化
          */
+            username_show = findViewById(R.id.username_show);
+            email_show = findViewById(R.id.email_show);
             // goto login page
             login_img = findViewById(R.id.loginImg);
             login_img.setOnClickListener(new View.OnClickListener(){
@@ -139,9 +155,11 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         Log.d(Tag, "onCreateOptions menu done");
+        keep_login();
         return true;
     }
-    // 菜单项监听
+
+    // 初始化分享按钮
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(Tag, "onOptionsItemSelected");
@@ -157,38 +175,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         Log.d(Tag, "onSupportNavigateUp");
-
         Log.d(Tag, "onSupportNavigateUp done");
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
+    /**
+     * 调试用
+     */
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(Tag, "Pause");
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(Tag, "Resume");
     }
-
     @Override
     protected void onRestart() {
         super.onRestart();
         Log.d(Tag, "Restart");
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(Tag, "Start");
     }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -197,26 +212,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * share with qq friends
+     * 分享到QQ空间
      */
     private class BaseUiListener implements IUiListener {
         @Override
-        public void onComplete(Object response) {
-            // 操作成功
-            Toast.makeText(MainActivity.this, "onComplete:", Toast.LENGTH_SHORT);
+        public void onComplete(Object response) {// 操作成功
         }
         protected void doComplete(JSONObject values) {
-            Toast.makeText(MainActivity.this, "doComplete:", Toast.LENGTH_SHORT);
         }
         @Override
-        public void onError(UiError e) {
-            // 分享异常
-            Toast.makeText(MainActivity.this, "Error:", Toast.LENGTH_SHORT);
+        public void onError(UiError e) {// 分享异常
         }
         @Override
-        public void onCancel() {
-            // 取消分享
-            Toast.makeText(MainActivity.this, "Cancel:", Toast.LENGTH_SHORT);
+        public void onCancel() {// 取消分享
         }
     }
     IUiListener shareListener = new BaseUiListener() {
@@ -232,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
         Tencent.onActivityResultData(requestCode, resultCode, data, shareListener);
         Tencent.handleResultData(data, shareListener);
     }
-
     private void doShareToQQ() {
         final Bundle params = new Bundle();
         params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
@@ -249,6 +256,47 @@ public class MainActivity extends AppCompatActivity {
         if(null != mTencent){
             mTencent.shareToQQ(MainActivity.this, params, shareListener);
         }
+    }
+
+    /**
+     * 登录后重启app会保持登录状态
+     */
+    private void keep_login(){
+        // 判断是否已登录
+        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        String currentEmail = preferences.getString("currentEmail", "");
+        if(currentEmail.trim().length()==0){
+            // 还未登录，无事发生
+        }else{
+            after_login(currentEmail);
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        Log.d(Tag, "create done");
+    }
+
+    /**
+     * 登录成功后需要改变界面、控件
+     */
+    private void after_login(String email){
+        // 登录按钮消失，个人信息展示
+        MainActivity.login_button.setVisibility(View.INVISIBLE);
+        MainActivity.username_show.setVisibility(View.VISIBLE);
+        MainActivity.email_show.setVisibility(View.VISIBLE);
+        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        String username = preferences.getString(email+"#username", "");
+        MainActivity.username_show.setText(username);
+        MainActivity.email_show.setText(email);
+
+        // 头像点击事件重写
+        MainActivity.login_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        // 头像图片
+        MainActivity.login_img.setImageResource(R.drawable.logged_user);
     }
 }
 

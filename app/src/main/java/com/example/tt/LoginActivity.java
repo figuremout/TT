@@ -2,6 +2,8 @@ package com.example.tt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.regex.*;
+
+/**
+ * 登录、注册是使用SharedPreference实现的伪登录注册，账号在本地持久化存储
+ */
 public class LoginActivity extends AppCompatActivity {
     private TextView register,signin,back_1,back_2;
     private EditText login_email, login_pwd, register_name, register_email, register_pwd;
@@ -93,7 +100,35 @@ public class LoginActivity extends AppCompatActivity {
                     login_pwd.setError("Password can't be empty!");
                     return;
                 }
-                Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+
+                // 判断邮箱是否已存在
+                SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
+                String is_exist = preferences.getString(email+"#username", "");
+                SharedPreferences.Editor editor = preferences.edit();
+                if(is_exist.trim().length()==0){
+                    login_email.setError("Account not exist!");
+                    return;
+                }else{
+                    // 判断邮箱是否合法
+                    String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                    boolean is_mail = Pattern.matches(email_pattern, email);
+                    if(!is_mail){
+                        register_email.setError("Email address is illegal!");
+                        register_email.setText("");
+                        return;
+                    }
+                    String correct_pwd = preferences.getString(email+"#pwd", "");
+                    if(pwd.equals(correct_pwd)){
+                        Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+                        // 写入currentEmail
+                        editor.putString("currentEmail", email);
+                        editor.apply();
+
+                        // 执行登录后的改变
+                        after_login(email);
+                        finish();
+                    }
+                }
             }
         });
 
@@ -117,7 +152,35 @@ public class LoginActivity extends AppCompatActivity {
                     register_pwd.setError("Password can't be empty!");
                     return;
                 }
-                Toast.makeText(LoginActivity.this, "Register Successfully!", Toast.LENGTH_SHORT).show();
+
+                SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                // 判断邮箱是否已注册
+                String is_exist = preferences.getString(email+"#username", "");
+                if(is_exist.trim().length()==0){
+                    // 判断邮箱是否合法
+                    String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                    boolean is_mail = Pattern.matches(email_pattern, email);
+                    if(!is_mail){
+                        register_email.setError("Email address is illegal!");
+                        register_email.setText("");
+                        return;
+                    }
+                    // 以邮箱为唯一标识，存储账号信息
+                    editor.putString(email+"#username", username);
+                    editor.putString(email+"#pwd", pwd);
+                    editor.apply();
+                    Toast.makeText(LoginActivity.this, "Register Successfully!", Toast.LENGTH_SHORT).show();
+                    switch_to_signin();
+                    login_email.setText(email);
+                    login_pwd.setText(pwd);
+                }else{
+                    // 该邮箱已注册
+                    register_email.setError("Email address already exists!");
+                    register_email.setText("");
+                }
+
+
             }
         });
     }
@@ -231,6 +294,30 @@ public class LoginActivity extends AppCompatActivity {
         // back clickable text out
         TextView back_2 = findViewById(R.id.finishRegister);
         back_2.setVisibility(View.GONE);
+    }
 
+    /**
+     * 登录成功后需要改变界面、控件
+     */
+    private void after_login(String email){
+        // 登录按钮消失，个人信息展示
+        MainActivity.login_button.setVisibility(View.INVISIBLE);
+        MainActivity.username_show.setVisibility(View.VISIBLE);
+        MainActivity.email_show.setVisibility(View.VISIBLE);
+        SharedPreferences preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        String username = preferences.getString(email+"#username", "");
+        MainActivity.username_show.setText(username);
+        MainActivity.email_show.setText(email);
+
+        // 头像点击事件重写
+        MainActivity.login_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        // 头像图片
+        MainActivity.login_img.setImageResource(R.drawable.logged_user);
     }
 }

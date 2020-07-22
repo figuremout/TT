@@ -18,11 +18,13 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/username_show"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="@string/nav_header_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/guideline18"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +33,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline15" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/email_show"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@string/nav_header_subtitle"
@@ -43,14 +45,15 @@
 
         <ImageButton
             android:id="@+id/loginImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/loginbutton"
             android:src="@drawable/user"
             app:layout_constraintBottom_toTopOf="@+id/guideline15"
             app:layout_constraintEnd_toStartOf="@+id/guideline14"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline20" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline14"
@@ -64,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.67" />
+            app:layout_constraintGuide_percent="0.66" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline16"
@@ -85,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.87" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline21"
@@ -106,7 +109,7 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:background="@drawable/round_button_shape"
-            android:backgroundTint="#ADD5EF"
+            android:backgroundTint="#9EBCF8"
             android:text="Sign in / Register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline21"
