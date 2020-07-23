@@ -39,10 +39,12 @@ import androidx.appcompat.widget.Toolbar;
 import org.json.JSONObject;
 import com.example.tt.LoginActivity.*;
 
-/**shared文件，可更名为accountInfo
- * email#username
- * email#pwd
- * currentEmail
+/**shared文件
+ * key: email#username value(String): email对应的用户名
+ * key: email#pwd value(String): email对应的密码
+ * key: currentEmail value(String): 当前登录账号的邮箱
+ * key: email#signDate value(String): email对应的最近打卡日期
+ * key: email#signTimes value(Int): email对应的连续打卡次数
  */
 public class MainActivity extends AppCompatActivity {
 

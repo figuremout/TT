@@ -53,7 +53,7 @@ public class MyRadarView extends View {
      */
     private double[] data = {50, 50, 50, 50, 50};
 
-    private String[] titles = {"a", "b", "c", "d", "e"};
+    private String[] titles = {"四字成语", "四字成语", "四字成语", "四字成语", "四字成语"};
 
     /**
      * 雷达区画笔
@@ -94,7 +94,7 @@ public class MyRadarView extends View {
         /**
          * 文字大小
          */
-        mTextPaint.setTextSize(40);
+        mTextPaint.setTextSize(35);
 
         mValuePaint = new Paint();
         mValuePaint.setAntiAlias(true);

@@ -108,7 +108,7 @@
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:background="@drawable/round_button_shape"
-            android:backgroundTint="#9EBCF8"
+            android:backgroundTint="@color/colorPrimaryLight"
             android:text="Sign in / Register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline21"
