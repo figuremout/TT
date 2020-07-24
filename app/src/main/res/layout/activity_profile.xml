@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
                 <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/scroll_height_guideline"
+                    android:id="@+id/editAffair_scroll_height_guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -173,7 +173,7 @@
                     android:backgroundTint="@android:color/white"
                     android:text="Log out"
                     android:textColor="@color/colorPrimary"
-                    app:layout_constraintBottom_toTopOf="@+id/scroll_height_guideline"
+                    app:layout_constraintBottom_toTopOf="@+id/editAffair_scroll_height_guideline"
                     app:layout_constraintEnd_toStartOf="@+id/guideline36"
                     app:layout_constraintStart_toStartOf="@+id/guideline31"
                     app:layout_constraintTop_toTopOf="@+id/guideline56" />
@@ -231,6 +231,7 @@
                     android:layout_height="wrap_content"
                     android:text="Username: "
                     android:textColor="@android:color/black"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline42"
                     app:layout_constraintEnd_toStartOf="@+id/guideline43"
                     app:layout_constraintStart_toStartOf="@+id/guideline31"
@@ -246,16 +247,6 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline44"
                     app:layout_constraintStart_toStartOf="@+id/guideline43"
                     app:layout_constraintTop_toTopOf="@+id/guideline40" />
-
-                <TextView
-                    android:id="@+id/profile_username"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="username"
-                    app:layout_constraintBottom_toTopOf="@+id/guideline42"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline44"
-                    app:layout_constraintStart_toStartOf="@+id/guideline43"
-                    app:layout_constraintTop_toTopOf="@+id/guideline41" />
 
                 <ImageButton
                     android:id="@+id/edit_username_img"
@@ -273,10 +264,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Enter username"
+                    android:enabled="false"
                     android:inputType="textPersonName"
-                    android:textSize="14sp"
-                    android:visibility="invisible"
+                    android:textColor="@color/colorPrimaryNight"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline42"
                     app:layout_constraintEnd_toStartOf="@+id/guideline44"
                     app:layout_constraintStart_toStartOf="@+id/guideline43"
@@ -423,7 +414,7 @@
                     android:layout_height="wrap_content"
                     android:text="m"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toTopOf="@+id/guideline55"

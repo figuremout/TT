@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button logout;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private TextView email, username,
+    private TextView email,
             sign_date, notSign_intro, signed_intro1, signed_intro2, signed_intro3, signed_intro4, since_last_sign, continuous_times;
     private EditText edit_username;
     private InputMethodManager imm;
@@ -88,12 +88,12 @@ public class ProfileActivity extends AppCompatActivity {
         sign_date.setText(date_str);
 
 
-        // 设置email和password
+        // 设置email和username
         email = findViewById(R.id.profile_email);
         String currentEmail = preferences.getString("currentEmail", "");
         email.setText(currentEmail);
-        username = findViewById(R.id.profile_username);
-        username.setText(preferences.getString(currentEmail+"#username", ""));
+        edit_username.setText(preferences.getString(currentEmail+"#username", ""));
+        edit_username.setBackground(null); // 去除下划线
 
         // 初始化软键盘控制
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -129,25 +129,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 判断是否是编辑状态
-                if(username.getVisibility() == View.VISIBLE){
-                    // 不是编辑状态，要变成编辑状态
-                    edit_username_img.setImageResource(R.drawable.submit);
-                    username.setVisibility(View.INVISIBLE);
-                    edit_username.setVisibility(View.VISIBLE);
-                    // 令编辑框获得焦点并打开软键盘
-                    edit_username.requestFocus();
-                    imm.showSoftInput(edit_username, 0);
-                    // 编辑框内容初始化为当前用户名，并将光标移动到最后
-                    currentEmail = preferences.getString("currentEmail", "");
-                    String username_str = preferences.getString(currentEmail+"#username", "");
-                    edit_username.setText(username_str);
-                    edit_username.setSelection(edit_username.getText().length());
-                }else{
+                if(edit_username.isEnabled()){
                     // 是编辑状态，要保存数据并变成非编辑状态
-                    edit_username_img.setImageResource(R.drawable.submit);
                     edit_username_img.setImageResource(R.drawable.ic_baseline_edit_24);
-                    username.setVisibility(View.VISIBLE);
-                    edit_username.setVisibility(View.INVISIBLE);
+                    edit_username.setEnabled(false);
                     // 隐藏软键盘
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                     // 保存数据
@@ -156,8 +141,19 @@ public class ProfileActivity extends AppCompatActivity {
                     editor.putString(currentEmail+"#username", new_username);
                     editor.apply();
                     // 刷新各界面上的旧用户名
-                    username.setText(new_username);
                     MainActivity.username_show.setText(new_username);
+                }else{
+                    // 不是编辑状态，要变成编辑状态
+                    edit_username_img.setImageResource(R.drawable.submit);
+                    edit_username.setEnabled(true);
+                    // 令编辑框获得焦点并打开软键盘
+                    edit_username.requestFocus();
+                    imm.showSoftInput(edit_username, 0);
+                    // 编辑框内容初始化为当前用户名，并将光标移动到最后
+                    currentEmail = preferences.getString("currentEmail", "");
+                    String username_str = preferences.getString(currentEmail+"#username", "");
+                    edit_username.setText(username_str);
+                    edit_username.setSelection(edit_username.getText().length());
                 }
             }
         });
@@ -223,8 +219,7 @@ public class ProfileActivity extends AppCompatActivity {
         signed_intro4.setVisibility(View.VISIBLE);
         since_last_sign.setVisibility(View.VISIBLE);
         continuous_times.setVisibility(View.VISIBLE);
-        // TODO 按钮图片切换，震动
-
+        // 按钮图片切换、失活
         fingerprint.setImageResource(R.drawable.celebrate);
         fingerprint.setEnabled(false);// setClickable(false)仍会显示点击效果
         // 更新最近打卡日期和连续打卡数

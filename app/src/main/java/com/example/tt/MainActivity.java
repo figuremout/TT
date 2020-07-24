@@ -2,7 +2,6 @@ package com.example.tt;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -14,20 +13,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.tt.myView.MyRadarView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-import com.tencent.connect.common.Constants;
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.UiThread;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -37,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONObject;
-import com.example.tt.LoginActivity.*;
+//import com.yydcdut.rxmarkdown.RxMDConfiguration;
 
 /**shared文件
  * key: email#username value(String): email对应的用户名
@@ -111,15 +105,57 @@ public class MainActivity extends AppCompatActivity {
         editor = preferences.edit();
     }
     private void initEvent(){
-        // add button
+        // 添加按钮点击出现弹窗
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+
+//                AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this)
+//                        .setTitle("这是标题")//标题
+//                        .setMessage("这是内容")//内容
+//                        .setIcon(R.drawable.radar)//图标
+//
+//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                Toast.makeText(MainActivity.this, "这是确定按钮", Toast.LENGTH_SHORT).show();
+//                            }
+//                        })
+//
+//                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                Toast.makeText(MainActivity.this, "这是取消按钮", Toast.LENGTH_SHORT).show();
+//                            }
+//                        })
+//                        .setNeutralButton("普通按钮", new DialogInterface.OnClickListener() {//添加普通按钮
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                Toast.makeText(MainActivity.this, "这是普通按钮按钮", Toast.LENGTH_SHORT).show();
+//                            }
+//                        })
+//                        .create();
+//                alertDialog1.show();
+
+                // 可用
+//                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+//                View view1 = View.inflate(MainActivity.this, R.layout.activity_input_affair, null);
+//                alertDialog
+//                        .setTitle("Login")
+//                        .setIcon(R.mipmap.ic_launcher)
+//                        .setView(view1)
+//                        .create();
+//                // TODO 要在这里操作自定义layout里的元素
+//                final AlertDialog show = alertDialog.show();
+
+                Intent intent = new Intent(MainActivity.this, editAffairActivity.class);
+                startActivity(intent);
             }
         });
     }
+
 
     // 初始化左侧滑菜单
     @Override
