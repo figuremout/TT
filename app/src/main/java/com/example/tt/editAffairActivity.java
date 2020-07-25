@@ -2,10 +2,12 @@ package com.example.tt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,28 +25,39 @@ import com.yydcdut.markdown.syntax.edit.EditFactory;
 import com.yydcdut.markdown.theme.ThemeDefault;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import rx.Subscriber;
 //import com.yydcdut.rxmarkdown.RxMDConfiguration;
 
+/**
+ * 文本编辑界面
+ * markdown实时渲染
+ */
 public class editAffairActivity extends AppCompatActivity {
     private MarkdownEditText editText;
     private  MarkdownProcessor markdownProcessor;
-    private ImageButton back;
+    private ImageButton back, showMd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_affair);
 
+        getSupportActionBar().hide();//隐藏标题栏
         // 设置状态栏颜色 有用
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);//添加Flag把状态栏设为可绘制模式
         window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        getSupportActionBar().hide();//隐藏标题栏
-
         initView();
         initEvent();
 
+        // 渲染
         markdown();
     }
 
@@ -53,6 +66,7 @@ public class editAffairActivity extends AppCompatActivity {
         editText.setBackground(null);// 取消下划线
 
         back = findViewById(R.id.imageButton3);
+        showMd = findViewById(R.id.showMd_button);
     }
     private void initEvent(){
         back.setOnClickListener(new View.OnClickListener() {
@@ -61,9 +75,21 @@ public class editAffairActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // 观察模式按钮事件
+        showMd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowMdActivity.startShowActivity(editAffairActivity.this, editText.getText().toString(), false);
+            }
+        });
     }
 
+    /**
+     * 渲染函数
+     */
     private void markdown() {
+        // 设置实时渲染效果
         MarkdownConfiguration markdownConfiguration = new MarkdownConfiguration.Builder(this)
                 .setDefaultImageSize(50, 50)
                 .setBlockQuotesLineColor(getResources().getColor(R.color.colorPrimaryLight)) // 引用块提示线颜色
@@ -75,19 +101,28 @@ public class editAffairActivity extends AppCompatActivity {
                 .setHeader5RelativeSize(1.2f)
                 .setHeader6RelativeSize(1.1f)
                 // 水平分割线颜色
-                .setHorizontalRulesColor(getResources().getColor(R.color.colorPrimary))
+                .setHorizontalRulesColor(getResources().getColor(R.color.md_HorizontalRulesColor))
                 // 水平分割线高度
-                .setHorizontalRulesHeight(10)
+                .setHorizontalRulesHeight(8)
+                // 引用提示线颜色
+                .setBlockQuotesLineColor(getResources().getColor(R.color.md_BlockQuotesLineColor))
+                // 引用块背景颜色(3层)
+                .setBlockQuotesBgColor(getResources().getColor(R.color.md_BlockQuotesBgColor),
+                        getResources().getColor(R.color.md_BlockQuotesBgColor),
+                        getResources().getColor(R.color.md_BlockQuotesBgColor))
                 // 行内代码背景颜色
-                .setCodeBgColor(getResources().getColor(R.color.colorPrimaryLight))
-
+                .setCodeBgColor(getResources().getColor(R.color.md_CodeBgColor))
                 // 待办事项颜色
-                .setTodoColor(0xffaa66cc)
+                .setTodoColor(getResources().getColor(R.color.md_TodoColor))
                 // 待办事项完成后颜色
-                .setTodoDoneColor(0xffff8800)
+                .setTodoDoneColor(getResources().getColor(R.color.md_TodoDoneColor))
                 // 无序列表颜色
-                .setUnOrderListColor(getResources().getColor(R.color.colorPrimary))
+                .setUnOrderListColor(getResources().getColor(R.color.md_UnOrderListColor))
                 .build();
+        markdownProcessor = new MarkdownProcessor(this);
+        markdownProcessor.config(markdownConfiguration);
+        markdownProcessor.factory(EditFactory.create());
+        markdownProcessor.live(editText);
         editText.setText("在这个**版本**中我们*增加test*了 `Markdown` 功能。`Markdown` 是~~一种使用纯文本编写的标记~~语言，可以产生格式![test](http://7xs03u.com1.z0.glb.clouddn.com/dex_dexopt_dex2oat.png/320$320)丰富的页面[^排版效果]，比如突出[标题](http://www.baidu.com)、居中、加粗、引用和生成列表。 https://www.google.com \n" +
                 "\n" +
                 "## **用法与规则：**\n" +
@@ -95,7 +130,7 @@ public class editAffairActivity extends AppCompatActivity {
                 "你可以手动输入，也可以点击键盘上方的按钮快速输入 Markdown 符号。\n" +
                 "\n" +
                 "### **标题**\n" +
-                "使用“#”加空格在*行首*来创建标题![test](drawable://" + "/300$300)\n" +
+                "使用“#”加空格在*行首*来创建标题\n" +
                 "***\n" +
                 "\n" +
                 "```\n" +
@@ -118,7 +153,7 @@ public class editAffairActivity extends AppCompatActivity {
                 "## 二级标题\n" +
                 "### 三级标题\n" +
                 "---\n" +
-                "![test](file://"  + "b.jpg/400$400" + ")\n" +
+                "" +
                 "### **加粗功能**\n" +
                 "使用一组星号“**”来加粗一段文字\n" +
                 "\n" +
@@ -132,7 +167,7 @@ public class editAffairActivity extends AppCompatActivity {
 //            "这是**加粗的文字**\n" +
                 "\n" +
                 "### **居中**\n" +
-                "使用一对中括号“[文字]”来居中一段文字，也可![test](assets://bb.jpg/100$100)以和标题叠加使用\n" +
+                "使用一对中括号“[文字]”来居中一段文字，也可以和标题叠加使用\n" +
                 "\n" +
                 "例如：\n" +
                 "[### 这是一个居中的标题]\n" +
@@ -205,9 +240,6 @@ public class editAffairActivity extends AppCompatActivity {
                 "1. 这是一个有序列表\n" +
                 "2. 这是一个有序列表\n" +
                 "3. 这是一个有序列表");
-        markdownProcessor = new MarkdownProcessor(this);
-        markdownProcessor.config(markdownConfiguration);
-        markdownProcessor.factory(EditFactory.create());
-        markdownProcessor.live(editText);
+
     }
 }

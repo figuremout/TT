@@ -7,4 +7,14 @@
     <color name="colorAccent">@color/colorPrimary</color><!--输入框-->
     <color name="hintColor">#C8C7C7</color>
     <color name="darkGray">#636363</color>
+
+    <!-- markdown渲染颜色-->
+    <color name="md_HorizontalRulesColor">@color/colorPrimary</color>
+    <color name="md_CodeBgColor">@color/colorPrimaryLight</color>
+    <color name="md_TodoColor">#808080</color>
+    <color name="md_TodoDoneColor">@color/colorPrimary</color>
+    <color name="md_UnOrderListColor">@color/colorPrimary</color>
+    <color name="md_BlockQuotesLineColor">#808080</color>
+    <color name="md_BlockQuotesBgColor">#BFBFBF</color>
+    <color name="md_LinkFontColor">#3366cc</color>
 </resources>

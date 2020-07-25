@@ -1,19 +1,27 @@
 package com.example.tt;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.tt.dialogView.AddAffairActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.tencent.connect.share.QQShare;
@@ -22,6 +30,7 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -39,6 +48,7 @@ import org.json.JSONObject;
  * key: currentEmail value(String): 当前登录账号的邮箱
  * key: email#signDate value(String): email对应的最近打卡日期
  * key: email#signTimes value(Int): email对应的连续打卡次数
+ * key: email#affairID=(事件创建时间) value(Int): email对应账户下标识为affairID的事件标题
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -91,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
         // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-        mTencent = Tencent.createInstance("1110702464", this.getApplicationContext());
+        mTencent = Tencent.createInstance("55555", this.getApplicationContext());
 
     }
 
@@ -109,49 +119,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
-//                AlertDialog alertDialog1 = new AlertDialog.Builder(MainActivity.this)
-//                        .setTitle("这是标题")//标题
-//                        .setMessage("这是内容")//内容
-//                        .setIcon(R.drawable.radar)//图标
-//
-//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Toast.makeText(MainActivity.this, "这是确定按钮", Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//
-//                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Toast.makeText(MainActivity.this, "这是取消按钮", Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//                        .setNeutralButton("普通按钮", new DialogInterface.OnClickListener() {//添加普通按钮
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                Toast.makeText(MainActivity.this, "这是普通按钮按钮", Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//                        .create();
-//                alertDialog1.show();
-
-                // 可用
-//                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-//                View view1 = View.inflate(MainActivity.this, R.layout.activity_input_affair, null);
-//                alertDialog
-//                        .setTitle("Login")
-//                        .setIcon(R.mipmap.ic_launcher)
-//                        .setView(view1)
-//                        .create();
-//                // TODO 要在这里操作自定义layout里的元素
-//                final AlertDialog show = alertDialog.show();
-
-                Intent intent = new Intent(MainActivity.this, editAffairActivity.class);
-                startActivity(intent);
+                // 未登录不允许使用
+                String currentEmail = preferences.getString("currentEmail", "");
+                if(currentEmail.trim().length()==0){
+                    // 还未登录
+                    Toast.makeText(MainActivity.this, "You haven't login!", Toast.LENGTH_SHORT).show();
+                }else{
+                    AddAffairActivity add = new AddAffairActivity();
+                    add.initAddDialog(MainActivity.this, preferences);
+                }
             }
         });
     }
@@ -253,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         Log.d(Tag, "Stop");
     }
+
 
 
     /**

@@ -51,8 +51,17 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    // https://github.com/yydcdut/RxMarkdown
-    // markdown渲染开源库
+    /**
+     * https://github.com/yydcdut/RxMarkdown
+     * markdown渲染开源库
+     * 相关的依赖如下
+     */
+    implementation 'io.reactivex:rxandroid:1.2.0'
+    implementation 'io.reactivex:rxjava:1.1.5'
     implementation 'com.yydcdut:markdown-processor:0.1.3'
-
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
+    implementation 'com.squareup.okio:okio:1.5.0'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.yydcdut:markdown-processor:0.1.3'
+    implementation 'com.yydcdut:rxmarkdown-wrapper:0.1.3'
 }

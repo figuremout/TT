@@ -16,11 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".editAffairActivity"
-            android:windowSoftInputMode = "adjustPan">
-            <!--android:windowSoftInputMode = "adjustPan"使当前窗口的内容将自动移动以便当前焦点从不被键盘覆盖和用户能总是看到输入内容的部分-->
-        </activity>
+        <activity android:name=".dialogView.SetCalActivity"></activity>
+        <activity android:name=".dialogView.AddAffairActivity" />
+        <activity android:name=".ShowMdActivity" />
+        <activity
+            android:name=".editAffairActivity"
+            android:windowSoftInputMode="adjustPan">
 
+            <!-- android:windowSoftInputMode = "adjustPan"使当前窗口的内容将自动移动以便当前焦点从不被键盘覆盖和用户能总是看到输入内容的部分 -->
+        </activity>
         <activity
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" /> <!-- 引入qq授权 -->
@@ -34,7 +38,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent1110702464" />
+                <data android:scheme="tencent55555" /><!--appid，这个是瞎编的，要和MainActivity.java中的统一-->
             </intent-filter>
         </activity>
         <activity

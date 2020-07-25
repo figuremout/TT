@@ -10,7 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class SplashActivity extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGHT = 2000; // 两秒后进入系统
+    private final int SPLASH_DISPLAY_LENGHT = 1000; // 一秒后进入系统
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
