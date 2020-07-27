@@ -7,8 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_share">Share</string>
     <string name="menu_home">Home</string>
-    <string name="menu_calendar">Calendar</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_done">Done Affair</string>
+    <string name="menu_outDated">Outdated Affair</string>
     <string name="loginbutton">LoginButton</string>
     <string name="emailHint">Email</string>
     <string name="passwordHint">Password</string>

@@ -1,16 +1,16 @@
-package com.example.tt.ui.gallery;
+package com.example.tt.ui.outdated;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class OutdatedViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public OutdatedViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is outdated fragment");
     }
 
     public LiveData<String> getText() {

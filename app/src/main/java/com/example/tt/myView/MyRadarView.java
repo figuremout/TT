@@ -1,6 +1,7 @@
 package com.example.tt.myView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -53,7 +54,12 @@ public class MyRadarView extends View {
      */
     private double[] data = {50, 50, 50, 50, 50};
 
-    private String[] titles = {"四字成语", "四字成语", "四字成语", "四字成语", "四字成语"};
+    private String[] titles = {"事务总数", "打卡考勤", "事务完成率", "内存洁癖", "乐于分享"};
+    // 事务总数：当前保存的所有事务的数量 反映用户忙闲
+    // 打卡考勤：连续打卡次数
+    // 事务完成率：已完成事务/事务总数
+    // 内存洁癖：删除事务数/删除事务数+事务总数
+    // 乐于分享：qq空间分享数+qq聊天次数
 
     /**
      * 雷达区画笔
@@ -186,11 +192,14 @@ public class MyRadarView extends View {
             //第3象限
             else if (angle * i >= Math.PI / 2 && angle * i <= Math.PI) {
                 float dis = mTextPaint.measureText(titles[i]);
-                canvas.drawText(titles[i], x - dis, y + dis, mTextPaint);
+//                canvas.drawText(titles[i], x - dis, y + dis, mTextPaint);
+                canvas.drawText(titles[i], x-dis, y, mTextPaint);
             }
             //第2象限
             else if (angle * i >= Math.PI && angle * i <= 3 * Math.PI / 2) {
-                canvas.drawText(titles[i], x, y, mTextPaint);
+//                canvas.drawText(titles[i], x, y, mTextPaint);
+                float dis = mTextPaint.measureText(titles[i]);
+                canvas.drawText(titles[i], x-dis, y, mTextPaint);
             }
             //第1象限
             else if (angle * i >= 3 * Math.PI / 2 && angle * i <= Math.PI * 2) {

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.tt.myView.MyRadarView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,10 +39,12 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText edit_username;
     private InputMethodManager imm;
     private String currentEmail;
-    SimpleDateFormat simpleDateFormat;
-    Date date;
+    private SimpleDateFormat simpleDateFormat;
+    private Date date;
     private String date_str;
-    Vibrator vibrator; //震动
+    private Vibrator vibrator; //震动
+    private MyRadarView radar;
+    private TextView radar_reminder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +94,18 @@ public class ProfileActivity extends AppCompatActivity {
         date_str = simpleDateFormat.format(date);
         sign_date.setText(date_str);
 
-
         // 设置email和username
         email = findViewById(R.id.profile_email);
         String currentEmail = preferences.getString("currentEmail", "");
         email.setText(currentEmail);
         edit_username.setText(preferences.getString(currentEmail+"#username", ""));
         edit_username.setBackground(null); // 去除下划线
+
+        // 初始化雷达图
+        radar = findViewById(R.id.radar);
+        radar_reminder = findViewById(R.id.textView9);
+        radar.setData(initRadar());
+
 
         // 初始化软键盘控制
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -252,7 +262,67 @@ public class ProfileActivity extends AppCompatActivity {
         // 设置UI上的距离上次打卡日数和连续打卡数
         since_last_sign.setText(period+"");
         continuous_times.setText(times+"");
+    }
 
+    private double[] initRadar(){
+        String[] affairIDList = preferences.getString(currentEmail+"#affairIDList", "").split(",");
+        // 事务总数：当前保存的所有事务的数量 反映用户忙闲
+        double affairNum = affairIDList.length;
+        // 打卡考勤：连续打卡次数
+        double signTimes = preferences.getInt(currentEmail+"#signTimes", 0);
+        // 事务完成率：已完成事务/事务总数
+        int done_affairNum = 0;
+        for(String affairID:affairIDList){
+            if(preferences.getBoolean(currentEmail+"#affairID="+affairID+"#status", false)){
+                done_affairNum++;
+            }
+        }
+        double done_rate = (done_affairNum / affairNum)*100;
+        // 内存洁癖：删除事务数/删除事务数+事务总数
+        int del_affairNum = preferences.getInt(currentEmail+"#delAffairNum", 0);
+        double del_rate = del_affairNum / (del_affairNum+affairNum) * 100;
+        // 乐于分享：qq空间分享数+qq聊天次数
+        double socialTimes = preferences.getInt(currentEmail+"#socialTimes", 0);
+
+        // 处理成适合显示的大小
+        double[] data = new double[5];
+        data[0] = (affairNum+50)/100<1 ? affairNum+50:100;
+        data[1] = (signTimes*5+50)/100<1 ? signTimes*5+50:100;
+        data[2] = done_rate==0 ? 50:done_rate;
+        data[3] = del_rate==0 ? 50:del_rate;
+        data[4] = (socialTimes*5+50)/100<1 ? socialTimes*5+50:100;
+        for(double i : data){
+            Log.d("12345", "radar"+i);
+        }
+
+        // 找到值最小的索引
+        int min_id = 0;
+        double min = data[0];
+        for(int i = 0; i < data.length; i++){
+            if(data[i] < min){
+                min = data[i];
+                min_id = i;
+            }
+        }
+        // 设置提示语
+        switch (min_id){
+            case 0:
+                radar_reminder.setText("要多多记录哦！");
+                break;
+            case 1:
+                radar_reminder.setText("打卡能起到督促的作用哦(ง •̀_•́)ง");
+                break;
+            case 2:
+                radar_reminder.setText("光说不练铁FIVE(￣へ￣)");
+                break;
+            case 3:
+                radar_reminder.setText("多清理对运行速度有帮助哦( ˙˘˙ )");
+                break;
+            case 4:
+                radar_reminder.setText("快去和小伙伴分享这个宝藏APP吧！");
+                break;
+        }
+        return data;
     }
 
 

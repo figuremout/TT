@@ -1,7 +1,5 @@
-package com.example.tt.ui.home;
+package com.example.tt.ui.done;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,22 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.tt.LoginActivity;
-import com.example.tt.MainActivity;
 import com.example.tt.R;
 import com.example.tt.dialogView.DeleteAffairActivity;
 import com.example.tt.editAffairActivity;
@@ -37,14 +28,12 @@ import com.example.tt.util.DateUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
-import static java.lang.Thread.sleep;
 
-public class HomeFragment extends Fragment {
+public class DoneFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private DoneViewModel doneViewModel;
     private LinearLayout ll;
     private Button item_button;
     private View root;
@@ -58,25 +47,26 @@ public class HomeFragment extends Fragment {
     private Boolean isRecycle;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        root = inflater.inflate(R.layout.fragment_home, container, false); // 实例化一个view，即fragment_home.xml
+        doneViewModel =
+                ViewModelProviders.of(this).get(DoneViewModel.class);
+        root = inflater.inflate(R.layout.fragment_done, container, false);
 
         initView();
         Log.d("12345", "oncreatefragment");
 
         // 获取所有事件并显示
         try {
-            getAllAffair();
+            getAllDoneAffair();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return root;
     }
+
+
     private void initView(){
         ll = root.findViewById(R.id.ll); // 元素需要到root里去找
 
@@ -106,7 +96,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 try {
-                    getAllAffair();
+                    getAllDoneAffair();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -118,7 +108,7 @@ public class HomeFragment extends Fragment {
 
     // 读取所有事务并添加事务项（需要界面重新加载才能显示）
     // todo 优化，提升速度
-    private void getAllAffair() throws ParseException {
+    private void getAllDoneAffair() throws ParseException {
         isRecycle = preferences.getBoolean(currentEmail+"#settings#isRecycle", false);
         // 清空界面
         ll.removeAllViews();
@@ -135,21 +125,16 @@ public class HomeFragment extends Fragment {
                 if_empty(true);
                 return;
             }else{
-                // 该账户已有事务，获取所有事务并显示
+                // 该账户已有事务，获取所有已完成事务并显示
+                if_empty(true);
                 affairIDList = affairIDList_str.split(",");
-                if(isRecycle){
-                    // 回收模式下，只显示未完成事件
-                    for (String affairID : affairIDList){
-                        if(!preferences.getBoolean(currentEmail+"#affairID="+affairID+"#status", false)){
-                            addItem(affairID);
-                        }
-                    }
-                }else{
-                    for (String affairID : affairIDList){
+                for (String affairID : affairIDList){
+                    if(preferences.getBoolean(currentEmail+"#affairID="+affairID+"#status", false)){
+                        // 事务已完成
                         addItem(affairID);
+                        if_empty(false);
                     }
                 }
-                if_empty(false);
             }
         }
     }
@@ -254,7 +239,7 @@ public class HomeFragment extends Fragment {
         super.onResume();
         // 登录后以及退出登录后，都会执行onResume()，在这里刷新事务列表可覆盖这两种情况
         try {
-            getAllAffair();
+            getAllDoneAffair();
         } catch (ParseException e) {
             e.printStackTrace();
         }

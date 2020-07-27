@@ -1,28 +1,21 @@
 package com.example.tt;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tt.dialogView.AddAffairActivity;
-import com.example.tt.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.tencent.connect.share.QQShare;
@@ -31,7 +24,6 @@ import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -49,12 +41,14 @@ import org.json.JSONObject;
  * key: currentEmail value(String): 当前登录账号的邮箱
  * key: email#signDate value(String): email对应的最近打卡日期
  * key: email#signTimes value(Int): email对应的连续打卡次数
+ * key: email#delAffairNum value(Int): email对应的删除事务数
+ * key: email#socialTimes value(Int): email对应的分享次数
  * key: email#settings#isRender value(Boolean): email对应账户的实时渲染设置
  * key: email#settings#isRecycle value(Boolean): email对应账户的自动回收设置
  * key: email#affairID=(事件创建时间)#title value(String): email对应账户下标识为affairID的事件标题
  * key: email#affairID=(事件创建时间)#content value(String): email对应账户下标识为affairID的事件内容 xxxxx
  * key: email#affairID=(事件创建时间)#date value(String): email对应账户下标识为affairID的事件日期
- * key: email#affairID=(事件创建时间)#status value(Boolean): email对应账户下标识为affairID的事件是否完成
+ * key: email#affairID=(事件创建时间)#status value(Boolean): email对应账户下标识为affairID的事件是否完成(true 已完成，false 未完成)
  * key: email#affairIDList value(String): email对应账户下注册的所有事件affairID(事件创建时间,...)
  * key: currentAffairDate value(String): 当前编辑事务的日期，用于人工选择日期界面暂时存储
  * key: currentAffairID value(String): 当前点击事务项的ID，在点击事务项按钮时设置，被打开的事务编辑界面获取
@@ -99,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_done, R.id.nav_outdated)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -191,6 +185,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(Tag, "onOptionsItemSelected");
+        // 社交次数加一
+        String currentEmail = preferences.getString("currentEmail", "");
+        editor.putInt(currentEmail+"#socialTimes", preferences.getInt(currentEmail+"#socialTimes", 0)+1);
+        editor.apply();
         switch (item.getItemId()){
             case R.id.action_share:// 分享按钮
                 doShareToQQ();

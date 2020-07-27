@@ -63,6 +63,8 @@ public class DeleteAffairActivity extends AppCompatActivity {
                             }
                         }
                         editor.putString(currentEmail+"#affairIDList", new_affairIDList);
+                        // 删除事务总数加一
+                        editor.putInt(currentEmail+"#delAffairNum", preferences.getInt(currentEmail+"#delAffairNum", 0)+1);
                         editor.apply();
                     }
                 })
