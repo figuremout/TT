@@ -37,10 +37,12 @@
         android:autofillHints=""
         android:background="@color/colorPrimaryLight"
         android:ems="10"
-        android:gravity="center"
+        android:hint="Title"
         android:inputType="textPersonName"
+        android:singleLine="true"
         android:text="Title"
         android:textColor="@android:color/white"
+        android:textColorHint="#DBE6FD"
         app:layout_constraintBottom_toBottomOf="@+id/inputAffair_head_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,12 +53,13 @@
     <com.yydcdut.markdown.MarkdownEditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="start|top"
         android:hint="Description"
         android:inputType="textMultiLine"
         android:minLines="1"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline45" />
@@ -66,14 +69,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.03" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline39"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.14" />
+        app:layout_constraintGuide_percent="0.95" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline60"
@@ -93,11 +96,10 @@
         android:id="@+id/showMd_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/guideline57"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline39"
+        app:layout_constraintStart_toStartOf="@+id/guideline60"
         app:layout_constraintTop_toTopOf="@+id/guideline46"
         app:srcCompat="@drawable/observe" />
 
@@ -107,7 +109,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/guideline57"
-        app:layout_constraintEnd_toStartOf="@+id/guideline39"
         app:layout_constraintStart_toStartOf="@+id/guideline48"
         app:layout_constraintTop_toTopOf="@+id/guideline46"
         app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
@@ -119,14 +120,16 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.05" />
 
-    <TextView
-        android:id="@+id/textView5"
+    <ImageButton
+        android:id="@+id/helpMd_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date"
-        android:textColor="@android:color/white"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/help"
+        app:layout_constraintBottom_toTopOf="@+id/guideline57"
         app:layout_constraintEnd_toStartOf="@+id/guideline60"
-        tools:layout_editor_absoluteY="54dp" />
+        app:layout_constraintTop_toTopOf="@+id/guideline46" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

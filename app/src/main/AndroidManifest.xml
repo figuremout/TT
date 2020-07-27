@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".dialogView.SetCalActivity"></activity>
+        <activity android:name=".dialogView.DeleteAffairActivity"></activity>
+        <activity android:name=".dialogView.SetCalActivity" />
         <activity android:name=".dialogView.AddAffairActivity" />
         <activity android:name=".ShowMdActivity" />
         <activity
@@ -38,7 +39,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent55555" /><!--appid，这个是瞎编的，要和MainActivity.java中的统一-->
+                <data android:scheme="tencent55555" /> <!-- appid，这个是瞎编的，要和MainActivity.java中的统一 -->
             </intent-filter>
         </activity>
         <activity

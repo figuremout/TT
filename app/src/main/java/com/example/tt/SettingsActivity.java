@@ -3,6 +3,7 @@ package com.example.tt;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +18,12 @@ import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageButton back;
-    private Switch darkTheme_switch,teenager_switch;
+    private Switch render_switch,recycle_switch;
     private Button github,customer_service;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String currentEmail;
+    private Boolean isRender, isRecycle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +41,16 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void initView(){
         back = findViewById(R.id.profile_back);
-        darkTheme_switch = findViewById(R.id.switch2);
-        teenager_switch = findViewById(R.id.switch1);
+        render_switch = findViewById(R.id.switch2);
+        recycle_switch = findViewById(R.id.switch1);
         github = findViewById(R.id.button4);
         customer_service = findViewById(R.id.button5);
+        // 初始化SharedPreferences
+        preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        editor = preferences.edit();
+        currentEmail = preferences.getString("currentEmail", "");
+        isRender = preferences.getBoolean(currentEmail+"#settings#isRender", false);
+        isRecycle = preferences.getBoolean(currentEmail+"#settings#isRecycle", false);
     }
     private void initEvent(){
         // 返回按钮
@@ -49,26 +60,30 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        // dark theme switch
-        darkTheme_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // real-time rendering switch
+        render_switch.setChecked(isRender);
+        render_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
-                    Toast.makeText(SettingsActivity.this, "Dark theme!", Toast.LENGTH_SHORT).show();
+                    editor.putBoolean(currentEmail+"#settings#isRender", true);
                 }else{
-                    Toast.makeText(SettingsActivity.this, "Default theme!", Toast.LENGTH_SHORT).show();
+                    editor.putBoolean(currentEmail+"#settings#isRender", false);
                 }
+                editor.apply();
             }
         });
-        // teenager mode switch
-        teenager_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // recycle done-affairs switch
+        recycle_switch.setChecked(isRecycle);
+        recycle_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked){
-                    Toast.makeText(SettingsActivity.this, "Teenager Mode!", Toast.LENGTH_SHORT).show();
+                    editor.putBoolean(currentEmail+"#settings#isRecycle", true);
                 }else{
-                    Toast.makeText(SettingsActivity.this, "Default Mode!", Toast.LENGTH_SHORT).show();
+                    editor.putBoolean(currentEmail+"#settings#isRecycle", false);
                 }
+                editor.apply();
             }
         });
         // github button

@@ -20,15 +20,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.yydcdut.markdown.MarkdownTextView
-                android:id="@+id/txt_md_show"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="left|top"
-                android:lineSpacingExtra="3dp"
-                android:padding="5dp"
-                android:text="Hello World!"
-                android:visibility="visible" />
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <com.yydcdut.markdown.MarkdownTextView
+                    android:id="@+id/txt_md_show"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left|top"
+                    android:lineSpacingExtra="3dp"
+                    android:padding="5dp"
+                    android:text="Hello World!"
+                    android:visibility="visible" />
+            </HorizontalScrollView>
+
         </FrameLayout>
     </ScrollView>
 
@@ -59,7 +64,6 @@
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:singleLine="true"
-        android:text="中文English"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
@@ -110,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Date+username"
+        android:text="username+date"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toStartOf="@+id/guideline59"

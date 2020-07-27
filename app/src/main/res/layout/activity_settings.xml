@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="Dark Theme"
+        android:text="Real-time Rendering"
         android:textColor="@android:color/black"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
@@ -47,7 +47,7 @@
         android:layout_marginTop="15dp"
         android:alpha="@dimen/inputAlpha"
         android:inputType="textMultiLine"
-        android:text="Switch to dark color-theme, suitable for night use."
+        android:text="As you're editing the content of an affair, render the text in the same time."
         app:layout_constraintBottom_toTopOf="@+id/guideline34"
         app:layout_constraintEnd_toStartOf="@+id/guideline35"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
@@ -60,7 +60,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline34"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
         app:layout_constraintTop_toTopOf="@+id/guideline32"
-        app:srcCompat="@drawable/ic_baseline_brightness_3_24" />
+        app:srcCompat="@drawable/markdown" />
 
     <Switch
         android:id="@+id/switch2"
@@ -79,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:text="Teenager Mode"
+        android:text="Auto-recycle Done Affairs"
         android:textColor="@android:color/black"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
@@ -92,7 +92,7 @@
         android:layout_marginTop="15dp"
         android:alpha="@dimen/inputAlpha"
         android:inputType="textMultiLine"
-        android:text="Auto-remove all improper words for kids' healthy growth."
+        android:text="When you mark an affair as done, app will clean up all realative info."
         app:layout_constraintBottom_toTopOf="@+id/guideline19"
         app:layout_constraintEnd_toStartOf="@+id/guideline35"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
@@ -105,7 +105,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline19"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
         app:layout_constraintTop_toTopOf="@+id/guideline34"
-        app:srcCompat="@drawable/ic_baseline_child_friendly_24" />
+        app:srcCompat="@drawable/recycle" />
 
     <Switch
         android:id="@+id/switch1"
@@ -119,60 +119,13 @@
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/switch2" />
 
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="15dp"
-        android:alpha="@dimen/inputAlpha"
-        android:inputType="textMultiLine"
-        android:text="Switch language between Chinese and English."
-        app:layout_constraintBottom_toTopOf="@+id/guideline23"
-        app:layout_constraintEnd_toStartOf="@+id/guideline35"
-        app:layout_constraintStart_toStartOf="@+id/guideline28"
-        app:layout_constraintTop_toTopOf="@+id/guideline19" />
-
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/guideline23"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
         app:layout_constraintTop_toTopOf="@+id/guideline19"
-        app:srcCompat="@drawable/ic_baseline_translate_24" />
-
-    <TextView
-        android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Switch Language"
-        android:textColor="@android:color/black"
-        android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline28"
-        app:layout_constraintTop_toTopOf="@+id/guideline19" />
-
-    <Switch
-        android:id="@+id/switch3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textOff="OFF"
-        android:textOn="ON"
-        android:theme="@style/AppTheme"
-        android:thumb="@drawable/switch_custom_thumb_selector"
-        android:track="@drawable/switch_custom_track_selector"
-        app:layout_constraintBottom_toTopOf="@+id/button4"
-        app:layout_constraintEnd_toStartOf="@+id/guideline30"
-        app:layout_constraintStart_toStartOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/guideline19" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline24"
-        app:layout_constraintStart_toStartOf="@+id/guideline27"
-        app:layout_constraintTop_toTopOf="@+id/guideline23"
         app:srcCompat="@drawable/github" />
 
     <TextView
@@ -182,28 +135,28 @@
         android:text="Visit GitHub Repository"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline23"
         app:layout_constraintEnd_toStartOf="@+id/guideline35"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
-        app:layout_constraintTop_toTopOf="@+id/button4" />
+        app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintBottom_toTopOf="@+id/guideline24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline23"
         app:layout_constraintEnd_toStartOf="@+id/guideline30"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
-        app:layout_constraintTop_toTopOf="@+id/guideline23" />
+        app:layout_constraintTop_toTopOf="@+id/guideline19" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22"
+        app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
-        app:layout_constraintTop_toTopOf="@+id/guideline24"
+        app:layout_constraintTop_toTopOf="@+id/guideline23"
         app:srcCompat="@drawable/customer_service" />
 
     <TextView
@@ -212,20 +165,20 @@
         android:layout_height="wrap_content"
         android:text="Any problem? Chat with the developer!"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22"
+        app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintEnd_toStartOf="@+id/guideline35"
         app:layout_constraintStart_toStartOf="@+id/guideline28"
-        app:layout_constraintTop_toTopOf="@+id/guideline24" />
+        app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
     <Button
         android:id="@+id/button5"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/selectableItemBackground"
-        app:layout_constraintBottom_toTopOf="@+id/guideline22"
+        app:layout_constraintBottom_toTopOf="@+id/guideline24"
         app:layout_constraintEnd_toStartOf="@+id/guideline30"
         app:layout_constraintStart_toStartOf="@+id/guideline27"
-        app:layout_constraintTop_toTopOf="@+id/guideline24" />
+        app:layout_constraintTop_toTopOf="@+id/guideline23" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline30"
@@ -268,13 +221,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline27"

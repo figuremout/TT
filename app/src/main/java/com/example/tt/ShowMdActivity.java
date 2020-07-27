@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -27,6 +29,8 @@ import com.yydcdut.markdown.loader.MDImageLoader;
 import com.yydcdut.markdown.syntax.text.TextFactory;
 import com.yydcdut.markdown.theme.ThemeSunburst;
 
+import org.w3c.dom.Text;
+
 /**
  * 观察模式
  * markdown更精细渲染
@@ -36,6 +40,10 @@ public class ShowMdActivity extends AppCompatActivity {
     public static final String EXTRA_RX = "is_rx";
     private ImageButton close;
     private Toast mToast;
+    private TextView showMd_title, showMd_username_date;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String currentEmail, currentAffairID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +66,22 @@ public class ShowMdActivity extends AppCompatActivity {
     }
 
     private void initView(){
+        // 初始化SharedPreferences
+        preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        editor = preferences.edit();
+        currentEmail = preferences.getString("currentEmail", "");
+        currentAffairID = preferences.getString("currentAffairID", "");
+
         close = findViewById(R.id.imageButton2);
+
+        // 显示事件标题，用户名+事件日期
+        showMd_title = findViewById(R.id.textView3);
+        showMd_title.setText(preferences.getString(currentEmail+"#affairID="+currentAffairID+"#title", ""));
+        showMd_username_date = findViewById(R.id.textView4);
+        showMd_username_date.setText(
+                preferences.getString(currentEmail+"#username", "")+
+                        " - "+
+                preferences.getString(currentEmail+"#affairID="+currentAffairID+"#date", ""));
     }
     private void initEvent(){
         close.setOnClickListener(new View.OnClickListener() {
@@ -118,14 +141,19 @@ public class ShowMdActivity extends AppCompatActivity {
                 .setOnLinkClickCallback(new OnLinkClickCallback() {
                     @Override
                     public void onLinkClicked(View view, String link) {
-                        toast(link);
+                        // 跳转网页
+                        Intent intent= new Intent();
+                        intent.setAction("android.intent.action.VIEW");
+                        Uri content_url = Uri.parse(link);
+                        intent.setData(content_url);
+                        startActivity(intent);
                     }
                 })
                 // 点击待办事项的callback事件
                 .setOnTodoClickCallback(new OnTodoClickCallback() {
                     @Override
                     public CharSequence onTodoClicked(View view, String line, int lineNumber) {
-                        toast("line:" + line + "\n" + "line number:" + lineNumber);
+                        // line是该行的内容，lineNumber是该行的行数
                         return textView.getText();
                     }
                 })

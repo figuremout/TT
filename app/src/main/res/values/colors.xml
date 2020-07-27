@@ -7,6 +7,7 @@
     <color name="colorAccent">@color/colorPrimary</color><!--输入框-->
     <color name="hintColor">#C8C7C7</color>
     <color name="darkGray">#636363</color>
+    <color name="outofdate">#FD5E5E</color>
 
     <!-- markdown渲染颜色-->
     <color name="md_HorizontalRulesColor">@color/colorPrimary</color>

@@ -2,19 +2,23 @@ package com.example.tt;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.tt.MainActivity;
 import com.example.tt.R;
+import com.example.tt.util.Const;
 import com.yydcdut.markdown.MarkdownConfiguration;
 import com.yydcdut.markdown.MarkdownEditText;
 import com.yydcdut.markdown.MarkdownProcessor;
@@ -39,9 +43,14 @@ import rx.Subscriber;
  * markdown实时渲染
  */
 public class editAffairActivity extends AppCompatActivity {
-    private MarkdownEditText editText;
+    private MarkdownEditText editContent;
     private  MarkdownProcessor markdownProcessor;
-    private ImageButton back, showMd;
+    private ImageButton back, showMd, helpMd;
+    private EditText editTitle;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private String currentEmail, currentAffairID, currentAffairTitle, currentAffairContent, userEditContentCache;
+    private Boolean helpMd_isShow = false, isRender;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,21 +66,39 @@ public class editAffairActivity extends AppCompatActivity {
         initView();
         initEvent();
 
-        // 渲染
-        markdown();
+        // 实时渲染
+        if(isRender){
+            markdown();
+        }
     }
 
     private void initView(){
-        editText = findViewById(R.id.editTextTextMultiLine);
-        editText.setBackground(null);// 取消下划线
+        // 初始化sharedPreferences
+        preferences = getSharedPreferences("shared", MODE_PRIVATE);
+        editor = preferences.edit();
+        currentEmail = preferences.getString("currentEmail", "");
+        currentAffairID = preferences.getString("currentAffairID", "");
+        currentAffairTitle = preferences.getString(currentEmail+"#affairID="+currentAffairID+"#title", "");
+        currentAffairContent = preferences.getString(currentEmail+"#affairID="+currentAffairID+"#content", "");
+        isRender = preferences.getBoolean(currentEmail+"#settings#isRender", false);
+
+        // 初始化内容编辑框
+        editContent = findViewById(R.id.editTextTextMultiLine);
+        editContent.setBackground(null);// 取消下划线
+        editContent.setText(currentAffairContent);
+        // 初始化标题编辑框
+        editTitle = findViewById(R.id.editTextTextPersonName);
+        editTitle.setText(currentAffairTitle);
 
         back = findViewById(R.id.imageButton3);
         showMd = findViewById(R.id.showMd_button);
+        helpMd = findViewById(R.id.helpMd_button);
     }
     private void initEvent(){
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 编辑活动退出慢，是因为在stop之前要调用HomeFragment的onResume()方法刷新界面
                 finish();
             }
         });
@@ -80,7 +107,29 @@ public class editAffairActivity extends AppCompatActivity {
         showMd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowMdActivity.startShowActivity(editAffairActivity.this, editText.getText().toString(), false);
+                ShowMdActivity.startShowActivity(editAffairActivity.this, editContent.getText().toString(), false);
+            }
+        });
+
+        // 生成帮助markdown
+        helpMd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(helpMd_isShow){
+                    // 若已显示help文档，重新显示用户编辑内容
+                    editContent.setText(userEditContentCache);
+                    if(isRender){
+                        markdown();
+                    }
+                }else{
+                    // 若未显示help文档，保存用户编辑内容并显示help文档
+                    userEditContentCache = editContent.getText().toString();
+                    editContent.setText(Const.contentExample);
+                    if(isRender){
+                        markdown();
+                    }
+                }
+                helpMd_isShow = !helpMd_isShow;
             }
         });
     }
@@ -122,124 +171,46 @@ public class editAffairActivity extends AppCompatActivity {
         markdownProcessor = new MarkdownProcessor(this);
         markdownProcessor.config(markdownConfiguration);
         markdownProcessor.factory(EditFactory.create());
-        markdownProcessor.live(editText);
-        editText.setText("在这个**版本**中我们*增加test*了 `Markdown` 功能。`Markdown` 是~~一种使用纯文本编写的标记~~语言，可以产生格式![test](http://7xs03u.com1.z0.glb.clouddn.com/dex_dexopt_dex2oat.png/320$320)丰富的页面[^排版效果]，比如突出[标题](http://www.baidu.com)、居中、加粗、引用和生成列表。 https://www.google.com \n" +
-                "\n" +
-                "## **用法与规则：**\n" +
-                "\n" +
-                "你可以手动输入，也可以点击键盘上方的按钮快速输入 Markdown 符号。\n" +
-                "\n" +
-                "### **标题**\n" +
-                "使用“#”加空格在*行首*来创建标题\n" +
-                "***\n" +
-                "\n" +
-                "```\n" +
-                "test1\n" +
-                "test2\n" +
-                "test3\n" +
-                "test4\n" +
-                "```\n" +
-                "\n" +
-                "- [ ] 123\n" +
-                "- [ ] 456\n" +
-                "- [ ] 789\n" +
-                "\n" +
-                "- [x] 987\n" +
-                "- [x] 654\n" +
-                "- [x] 321\n" +
-                "\n" +
-                "例如：\n" +
-                "# 一级标题\n" +
-                "## 二级标题\n" +
-                "### 三级标题\n" +
-                "---\n" +
-                "" +
-                "### **加粗功能**\n" +
-                "使用一组星号“**”来加粗一段文字\n" +
-                "\n" +
-                "```c\n" +
-                "test1\n" +
-                "test2\n" +
-                "test3\n" +
-                "test4\n" +
-                "```" +
-//            "例如：\n" +
-//            "这是**加粗的文字**\n" +
-                "\n" +
-                "### **居中**\n" +
-                "使用一对中括号“[文字]”来居中一段文字，也可以和标题叠加使用\n" +
-                "\n" +
-                "例如：\n" +
-                "[### 这是一个居中的标题]\n" +
-                "\n" +
-                "### **引用**\n" +
-                "使用“> ”在段首来引用一段文字\n" +
-                "\n" +
-                "例如：\n" +
-                "> 这是一段引用\n" +
-                "> > > 这是一段引用\n" +
-                "\n" +
-                "### **无序列表**\n" +
-                "使用 “-”、“*”或“+”加空格 来创建无序列表\n" +
-                "\n" +
-                "例如：\n" +
-                "- 这是一个无序列表\n" +
-                "+ 这是一个无序列表\n" +
-                "* 这是一个无序列表\n" +
-                "\n" +
-                "### **有序列表**\n" +
-                "使用 数字圆点加空格 如“1. ”、“2. ”来创建有序列表\n" +
-                "\n" +
-                "```java\n" +
-                "public abstract class MemberIdsSection extends UniformItemSection {\n" +
-                "  /** {@inheritDoc} */\n" +
-                "    @Override\n" +
-                "    protected void orderItems() {\n" +
-                "        int idx = 0;\n" +
-                "\n" +
-                "        if (items().size() > DexFormat.MAX_MEMBER_IDX + 1) {\n" +
-                "            throw new DexIndexOverflowException(getTooManyMembersMessage());\n" +
-                "        }\n" +
-                "\n" +
-                "        for (Object i : items()) {\n" +
-                "            ((MemberIdItem) i).setIndex(idx);\n" +
-                "            idx++;\n" +
-                "        }\n" +
-                "    }\n" +
-                "\n" +
-                "    private String getTooManyMembersMessage() {\n" +
-                "        Map<String, AtomicInteger> membersByPackage = new TreeMap<String, AtomicInteger>();\n" +
-                "        for (Object member : items()) {\n" +
-                "            String packageName = ((MemberIdItem) member).getDefiningClass().getPackageName();\n" +
-                "            AtomicInteger count = membersByPackage.get(packageName);\n" +
-                "            if (count == null) {\n" +
-                "                count = new AtomicInteger();\n" +
-                "                membersByPackage.put(packageName, count);\n" +
-                "            }\n" +
-                "            count.incrementAndGet();\n" +
-                "        }\n" +
-                "\n" +
-                "        Formatter formatter = new Formatter();\n" +
-                "        try {\n" +
-                "            String memberType = this instanceof MethodIdsSection ? \"method\" : \"field\";\n" +
-                "            formatter.format(\"Too many %s references: %d; max is %d.%n\" +\n" +
-                "                    Main.getTooManyIdsErrorMessage() + \"%n\" +\n" +
-                "                    \"References by package:\",\n" +
-                "                    memberType, items().size(), DexFormat.MAX_MEMBER_IDX + 1);\n" +
-                "            for (Map.Entry<String, AtomicInteger> entry : membersByPackage.entrySet()) {\n" +
-                "                formatter.format(\"%n%6d %s\", entry.getValue().get(), entry.getKey());\n" +
-                "            }\n" +
-                "            return formatter.toString();\n" +
-                "        } finally {\n" +
-                "            formatter.close();\n" +
-                "        }\n" +
-                "    }\n" +
-                "}\n" +
-                "```\n" +
-                "例如：\n" +
-                "1. 这是一个有序列表\n" +
-                "2. 这是一个有序列表\n" +
-                "3. 这是一个有序列表");
-
+        markdownProcessor.live(editContent);
     }
+
+    /**
+     * 调试用
+     */
+    @Override
+    protected void onPause() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 结束编辑页面活动时保存内容
+                editor.putString(currentEmail+"#affairID="+currentAffairID+"#title", editTitle.getText().toString());
+                editor.putString(currentEmail+"#affairID="+currentAffairID+"#content", editContent.getText().toString());
+                editor.apply();
+            }
+        }).start();
+        super.onPause();
+        Log.d("12345", "Pauseedit");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("12345", "Resumeedit");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("12345", "Restartedit");
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("12345", "Startedit");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("12345", "Stopedit");
+    }
+
+
 }

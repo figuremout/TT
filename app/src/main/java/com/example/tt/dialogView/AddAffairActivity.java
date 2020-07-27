@@ -3,20 +3,28 @@ package com.example.tt.dialogView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.fragment.app.Fragment;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.example.tt.MainActivity;
 import com.example.tt.R;
 import com.example.tt.SettingsActivity;
+import com.example.tt.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,10 +36,10 @@ import java.util.Date;
 public class AddAffairActivity extends AppCompatActivity {
     private EditText editText;
     private ImageButton send, cal;
-    String currentEmail;
+    private String currentEmail, affairTitle;
     private SharedPreferences.Editor editor;
-    SimpleDateFormat simpleDateFormat;
-    Date date;
+    private SimpleDateFormat simpleDateFormat;
+    private Date date;
     private String date_str;
     private AlertDialog.Builder alertDialog;
     private AlertDialog alertDialog_show;
@@ -50,7 +58,7 @@ public class AddAffairActivity extends AppCompatActivity {
      * 初始化弹窗
      * 弹窗内的元素都要在这里操作，在MainActivity中调用
      */
-    public void initAddDialog(final Context context, SharedPreferences preferences){
+    public void initAddDialog(final Context context, final SharedPreferences preferences){
         View view1 = View.inflate(context, R.layout.activity_add_affair, null);
         // 初始化控件
         editText = view1.findViewById(R.id.newAffair_text);
@@ -88,7 +96,27 @@ public class AddAffairActivity extends AppCompatActivity {
             public void onClick(View view) {
                 date = new Date(System.currentTimeMillis());//获取当前时间
                 date_str = simpleDateFormat.format(date);
-                editor.putString(currentEmail+"#affairID="+date_str+"#title", editText.getText().toString());
+                affairTitle = editText.getText().toString();
+                // 存储进事件ID列表
+                String affairIDList = preferences.getString(currentEmail+"#affairIDList", "");
+                editor.putString(currentEmail+"#affairIDList", affairIDList+date_str+",");
+                // 存储事件标题
+                editor.putString(currentEmail+"#affairID="+date_str+"#title", affairTitle);
+                // 存储事件日期
+                String currentAffairDate = preferences.getString("currentAffairDate", "");
+                if(currentAffairDate.trim().length() == 0){
+                    // 若未手动选择日期，获取当天日期并存储
+                    String affairDate = date_str.split(" ")[0];
+                    // 存储
+                    editor.putString(currentEmail+"#affairID="+date_str+"#date", affairDate);
+                }else{
+                    // 若选择了日期，直接存储选择的日期
+                    editor.putString(currentEmail+"#affairID="+date_str+"#date", currentAffairDate);
+                    // 用完了要清空currentAffairDate数据
+                    editor.putString("currentAffairDate", "");
+                }
+                editor.putBoolean(currentEmail+"#affairID="+date_str+"#status", false); // 初始化事件状态为未完成
+                Log.d("12345", "事件数据已存储");
                 editor.apply();
                 alertDialog_show.dismiss(); // 关闭弹窗
             }
@@ -98,7 +126,7 @@ public class AddAffairActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SetCalActivity cal = new SetCalActivity();
-                cal.initCalDialog(context);
+                cal.initCalDialog(context, preferences);
             }
         });
         // 设置并展示弹窗
