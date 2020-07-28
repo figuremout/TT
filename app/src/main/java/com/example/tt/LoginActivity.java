@@ -99,31 +99,31 @@ public class LoginActivity extends AppCompatActivity {
                 String email = login_email.getText().toString();
                 String pwd = login_pwd.getText().toString();
                 if(email.trim().length()==0){
-                    login_email.setError("Email can't be empty!");
+                    login_email.setError(getResources().getString(R.string.emptyEmail));
                     return;
                 }
                 if(pwd.trim().length()==0){
-                    login_pwd.setError("Password can't be empty!");
+                    login_pwd.setError(getResources().getString(R.string.emptyPassword));
                     return;
                 }
 
                 // 判断邮箱是否已存在
                 String is_exist = preferences.getString(email+"#username", "");
                 if(is_exist.trim().length()==0){
-                    login_email.setError("Account not exist!");
+                    login_email.setError(getResources().getString(R.string.accountNotExist));
                     return;
                 }else{
                     // 判断邮箱是否合法
                     String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                     boolean is_mail = Pattern.matches(email_pattern, email);
                     if(!is_mail){
-                        login_email.setError("Email address is illegal!");
+                        login_email.setError(getResources().getString(R.string.illegalEmail));
                         login_email.setText("");
                         return;
                     }
                     String correct_pwd = preferences.getString(email+"#pwd", "");
                     if(pwd.equals(correct_pwd)){
-                        Toast.makeText(LoginActivity.this, "Login Successfully!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.loginSuccess), Toast.LENGTH_SHORT).show();
                         // 写入currentEmail
                         editor.putString("currentEmail", email);
                         editor.apply();
@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         after_login(email);
                         finish();
                     }else{
-                        login_pwd.setError("Wrong password!");
+                        login_pwd.setError(getResources().getString(R.string.wrongPassword));
                     }
                 }
             }
@@ -147,15 +147,15 @@ public class LoginActivity extends AppCompatActivity {
                 String pwd = register_pwd.getText().toString();
 
                 if(username.trim().length()==0){
-                    register_name.setError("Username can't be empty!");
+                    register_name.setError(getResources().getString(R.string.emptyUsername));
                     return;
                 }
                 if(email.trim().length()==0){
-                    register_email.setError("Email can't be empty!");
+                    register_email.setError(getResources().getString(R.string.emptyEmail));
                     return;
                 }
                 if(pwd.trim().length()==0){
-                    register_pwd.setError("Password can't be empty!");
+                    register_pwd.setError(getResources().getString(R.string.emptyPassword));
                     return;
                 }
 
@@ -166,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
                     boolean is_mail = Pattern.matches(email_pattern, email);
                     if(!is_mail){
-                        register_email.setError("Email address is illegal!");
+                        register_email.setError(getResources().getString(R.string.illegalEmail));
                         register_email.setText("");
                         return;
                     }
@@ -174,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(email+"#username", username);
                     editor.putString(email+"#pwd", pwd);
                     editor.apply();
-                    Toast.makeText(LoginActivity.this, "Register Successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.registerSuccess), Toast.LENGTH_SHORT).show();
 
                     // 自动填充信息到登录界面
                     switch_to_signin();
@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     login_pwd.setText(pwd);
                 }else{
                     // 该邮箱已注册
-                    register_email.setError("Email address already exists!");
+                    register_email.setError(getResources().getString(R.string.emailExist));
                     register_email.setText("");
                 }
 

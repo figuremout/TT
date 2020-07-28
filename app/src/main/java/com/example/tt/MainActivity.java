@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 String currentEmail = preferences.getString("currentEmail", "");
                 if(currentEmail.trim().length()==0){
                     // 还未登录
-                    Toast.makeText(MainActivity.this, "You haven't login!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.notLogin, Toast.LENGTH_SHORT).show();
                 }else{
                     AddAffairActivity add = new AddAffairActivity();
                     add.initAddDialog(MainActivity.this, preferences);

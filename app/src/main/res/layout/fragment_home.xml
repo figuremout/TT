@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:alpha="@dimen/inputAlpha"
-        android:text="快来记录吧！"
+        android:text="@string/affairEmpty"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

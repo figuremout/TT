@@ -73,15 +73,15 @@ public class SetCalActivity extends AppCompatActivity {
         // 设置并展示弹窗
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog
-                .setTitle("Set Time")
+                .setTitle(R.string.setDate)
                 .setView(view2)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {//添加"Yes"按钮
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         editor.apply();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {//添加取消
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // 不将数据存进去

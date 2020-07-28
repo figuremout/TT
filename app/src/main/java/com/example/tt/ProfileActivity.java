@@ -1,6 +1,7 @@
 package com.example.tt;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -45,7 +46,6 @@ public class ProfileActivity extends AppCompatActivity {
     private Vibrator vibrator; //震动
     private MyRadarView radar;
     private TextView radar_reminder;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,7 +267,7 @@ public class ProfileActivity extends AppCompatActivity {
     private double[] initRadar(){
         String[] affairIDList = preferences.getString(currentEmail+"#affairIDList", "").split(",");
         // 事务总数：当前保存的所有事务的数量 反映用户忙闲
-        double affairNum = affairIDList.length;
+        double affairNum = affairIDList.length;//affairIDList末尾有一个,使得事务数多一，但不能减去，避免完成率、删除率除零
         // 打卡考勤：连续打卡次数
         double signTimes = preferences.getInt(currentEmail+"#signTimes", 0);
         // 事务完成率：已完成事务/事务总数
@@ -291,8 +291,8 @@ public class ProfileActivity extends AppCompatActivity {
         data[2] = done_rate==0 ? 50:done_rate;
         data[3] = del_rate==0 ? 50:del_rate;
         data[4] = (socialTimes*5+50)/100<1 ? socialTimes*5+50:100;
-        for(double i : data){
-            Log.d("12345", "radar"+i);
+        for(int i = 0; i < data.length; i++){
+            Log.d("12345", "radar"+i+": "+data[i]);
         }
 
         // 找到值最小的索引
@@ -307,19 +307,19 @@ public class ProfileActivity extends AppCompatActivity {
         // 设置提示语
         switch (min_id){
             case 0:
-                radar_reminder.setText("要多多记录哦！");
+                radar_reminder.setText(R.string.low_affairNum);
                 break;
             case 1:
-                radar_reminder.setText("打卡能起到督促的作用哦(ง •̀_•́)ง");
+                radar_reminder.setText(R.string.low_signTimes);
                 break;
             case 2:
-                radar_reminder.setText("光说不练铁FIVE(￣へ￣)");
+                radar_reminder.setText(R.string.low_doneRate);
                 break;
             case 3:
-                radar_reminder.setText("多清理对运行速度有帮助哦( ˙˘˙ )");
+                radar_reminder.setText(R.string.low_delRate);
                 break;
             case 4:
-                radar_reminder.setText("快去和小伙伴分享这个宝藏APP吧！");
+                radar_reminder.setText(R.string.low_socialTimes);
                 break;
         }
         return data;

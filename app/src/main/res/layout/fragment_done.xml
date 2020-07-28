@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:alpha="@dimen/inputAlpha"
-        android:text="目前没有已完成事件呢~"
+        android:text="@string/doneAffairEmpty"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

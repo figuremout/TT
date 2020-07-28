@@ -132,7 +132,7 @@ public class AddAffairActivity extends AppCompatActivity {
         // 设置并展示弹窗
         alertDialog = new AlertDialog.Builder(context);
         alertDialog
-                .setTitle("New Affair")
+                .setTitle(R.string.newAffair)
                 .setView(view1)
                 .create();
         alertDialog_show = alertDialog.show();

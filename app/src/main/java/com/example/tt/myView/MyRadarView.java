@@ -54,7 +54,11 @@ public class MyRadarView extends View {
      */
     private double[] data = {50, 50, 50, 50, 50};
 
-    private String[] titles = {"事务总数", "打卡考勤", "事务完成率", "内存洁癖", "乐于分享"};
+    private String[] titles = {getResources().getString(R.string.affairNum),
+            getResources().getString(R.string.signTimes),
+            getResources().getString(R.string.doneRate),
+            getResources().getString(R.string.delRate),
+            getResources().getString(R.string.socialTimes)};
     // 事务总数：当前保存的所有事务的数量 反映用户忙闲
     // 打卡考勤：连续打卡次数
     // 事务完成率：已完成事务/事务总数
