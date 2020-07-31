@@ -1,23 +1,3 @@
-<script>
-    function is_qq(){
-        var ua = navigator.userAgent.toLowerCase();
-        if (ua.match(/QQ/i) == "qq") {
-        return true;
-        }
-        return false;
-    }
-    window.onload = function(){
-        let apk_link = document.querySelector("td a");
-        apk_link.onclick = function(){
-            if(is_qq()){
-                alert("Alert: 检测到当前使用的是QQ内置浏览器。\n为避免被重定向，APK下载链接已失活处理，请通过其他手机浏览器打开！");
-                apk_link.href = "#";
-                apk_link.innerText = "Inactive Link";
-            }
-        }
-    }
-</script>
-
 # TT (TickTock)
 > My first android app.
 > > An android time-manager for minimalist.
@@ -34,43 +14,28 @@ Under MIT License.
 
 |Type|Version|Time|Description|
 |--|--|--|--|
-|Debug|[v1.1.0 (Alpha)](./TT_debug1.1.0.apk)|*2020.07.16*|*|
+|Debug|[v1.1.0 (Alpha)](http://www.zjmpage.com/TT/TT_debug1.1.0.apk)|*2020.07.16*|*|
 |||
 
 ## TODO List [#](#)
-- [ ] Login & Register
+- [ ] Alarm
 
 ## Note [#](#)
-1. Add click event on a clickable thing
-```java
-    Button login_button = findViewById(R.id.button3);
-    login_button.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            
-        }
-    });
-```
-2. Open a new page
-```java
-    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-    startActivity(intent);
-```
-3. Finish an activity (to close a page)
-```java
-    finish();
-```
-4. Add ripple effect on a button: [Blog](https://www.cnblogs.com/weimore/p/7725256.html)
-5. Create splash page: [Blog](https://blog.csdn.net/qq_39732867/article/details/86512712)
-6. Customize Switch: [Blog](https://www.jianshu.com/p/4e436300f328)
-7. Turn SVG into VectorDrawable XML: [Blog](https://blog.csdn.net/lupengfei1009/article/details/51079123)
-8. Open a web page in browser (also work for QQ customer service link): [Blog](https://blog.csdn.net/CC1991_/article/details/98625451)
-9. Simple animation
-```java
-    // username in
-    EditText register_username = findViewById(R.id.editTextTextPersonName);
-    register_username.setVisibility(View.VISIBLE);
-    register_username.setAnimation(AnimationUtils.makeInAnimation(this,false));
-```
-10. Generate APK: [Blog](https://www.cnblogs.com/lsdb/p/9337342.html)
-11. Share app with QQ friends (based on QQ opensdk): [myBlog](https://blog.csdn.net/qq_43536897/article/details/107344431) 
+> All data stored in `data/data/com.example.tt/shared_prefs/shared.xml` with SharedPreferences.
+> Here is the naming rules.
+ * key: (email)#username value(String): email对应的用户名
+ * key: (email)#pwd value(String): email对应的密码
+ * key: (email)#signDate value(String): email对应的最近打卡日期
+ * key: (email)#signTimes value(Int): email对应的连续打卡次数
+ * key: (email)#delAffairNum value(Int): email对应的删除事务数
+ * key: (email)#socialTimes value(Int): email对应的分享次数
+ * key: (email)#settings#isRender value(Boolean): email对应账户的实时渲染设置
+ * key: (email)#settings#isRecycle value(Boolean): email对应账户的自动回收设置
+ * key: (email)#affairID=(事件创建时间)#title value(String): email对应账户下标识为affairID的事件标题
+ * key: (email)#affairID=(事件创建时间)#content value(String): email对应账户下标识为affairID的事件内容 xxxxx
+ * key: (email)#affairID=(事件创建时间)#date value(String): email对应账户下标识为affairID的事件日期
+ * key: (email)#affairID=(事件创建时间)#status value(Boolean): email对应账户下标识为affairID的事件是否完成(true 已完成，false 未完成)
+ * key: (email)#affairIDList value(String[]): email对应账户下注册的所有事件affairID(事件创建时间,...)
+ * key: currentEmail value(String): 当前登录账号的邮箱
+ * key: currentAffairDate value(String): 当前编辑事务的日期，用于人工选择日期界面暂时存储
+ * key: currentAffairID value(String): 当前点击事务项的ID，在点击事务项按钮时设置，被打开的事务编辑界面获取
