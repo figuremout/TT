@@ -51,6 +51,7 @@
     <string name="socialTimes">Social Star</string>
     <string name="logout">Log out</string>
     <string name="newAffair">New Affair</string>
+    <string name="delAffair">Delete Affair</string>
     <string name="setDate">Set Date</string>
     <string name="notLogin">You have not login!</string>
     <string name="emptyEmail">Email can not be empty!</string>

@@ -163,12 +163,4 @@ public class ShowMdActivity extends AppCompatActivity {
         processor.config(markdownConfiguration);
         textView.setText(processor.parse(content));
     }
-
-    private void toast(String msg) {
-        if (mToast == null) {
-            mToast = Toast.makeText(ShowMdActivity.this, "", Toast.LENGTH_SHORT);
-        }
-        mToast.setText(msg);
-        mToast.show();
-    }
 }

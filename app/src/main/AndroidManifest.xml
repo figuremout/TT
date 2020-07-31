@@ -39,7 +39,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent55555" /> <!-- appid，这个是瞎编的，要和MainActivity.java中的统一 -->
+                <data android:scheme="tencent222222" /> <!-- appid，这个是瞎编的，要和MainActivity.java中的统一 -->
             </intent-filter>
         </activity>
         <activity

@@ -11,9 +11,9 @@
     <string name="emailHint">邮箱</string>
     <string name="passwordHint">密码</string>
     <string name="loginButtonText">登录</string>
-    <string name="registerSwitcherText">注册</string>
+    <string name="registerSwitcherText">没有账号？</string>
     <string name="backText">返回</string>
-    <string name="sign_inSwitcher">登录</string>
+    <string name="sign_inSwitcher">已有账号</string>
     <string name="usernameHint">用户名</string>
     <string name="registerButtonText">注册</string>
     <string name="settings_title">设置</string>
@@ -22,10 +22,10 @@
     <string name="editAffairContentHint">描述</string>
     <string name="profileEmailReminder">邮箱：</string>
     <string name="profileUsernameReminder">用户名：</string>
-    <string name="profilePerformance">表现</string>
+    <string name="profilePerformance">表现评估</string>
     <string name="profileSign">打卡</string>
     <string name="signPart1">"今天是 "</string>
-    <string name="signPart2">长按签到哦~</string>
+    <string name="signPart2">长按打卡哦~</string>
     <string name="signPart3">"距离上一次签到已过去 "</string>
     <string name="signPart4">" 天"</string>
     <string name="signPart5">"目前连续签到 "</string>
@@ -48,7 +48,7 @@
     <string name="signTimes">打卡考勤</string>
     <string name="doneRate">事务完成率</string>
     <string name="delRate">内存洁癖</string>
-    <string name="socialTimes">朋友圈明星</string>
+    <string name="socialTimes">分享次数</string>
     <string name="logout">退出登录</string>
     <string name="newAffair">新建事务</string>
     <string name="setDate">设置日期</string>
@@ -62,4 +62,5 @@
     <string name="emptyUsername">用户名不能为空！</string>
     <string name="registerSuccess">注册成功！</string>
     <string name="emailExist">邮箱已注册！</string>
+    <string name="delAffair">删除事务</string>
 </resources>

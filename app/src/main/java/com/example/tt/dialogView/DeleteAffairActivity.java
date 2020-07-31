@@ -43,7 +43,7 @@ public class DeleteAffairActivity extends AppCompatActivity {
         // 设置并展示弹窗
         alertDialog = new AlertDialog.Builder(context);
         alertDialog
-                .setTitle("Delete Affair")
+                .setTitle(R.string.delAffair)
                 .setView(view1)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                     @Override

@@ -253,8 +253,8 @@ public class ProfileActivity extends AppCompatActivity {
             // 连续打卡日数不变，因此times值不变
         }
         else{
-            // 若相隔多天，连续打卡数清零
-            times = 0;
+            // 若相隔多天，连续打卡数清空，加上本次打卡
+            times = 1;
             editor.putInt(currentEmail+"#signTimes", times);
         }
         editor.putString(currentEmail+"#signDate", date_str);

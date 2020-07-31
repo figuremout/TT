@@ -49,7 +49,7 @@ import org.json.JSONObject;
  * key: email#affairID=(事件创建时间)#content value(String): email对应账户下标识为affairID的事件内容 xxxxx
  * key: email#affairID=(事件创建时间)#date value(String): email对应账户下标识为affairID的事件日期
  * key: email#affairID=(事件创建时间)#status value(Boolean): email对应账户下标识为affairID的事件是否完成(true 已完成，false 未完成)
- * key: email#affairIDList value(String): email对应账户下注册的所有事件affairID(事件创建时间,...)
+ * key: email#affairIDList value(String[]): email对应账户下注册的所有事件affairID(事件创建时间,...)
  * key: currentAffairDate value(String): 当前编辑事务的日期，用于人工选择日期界面暂时存储
  * key: currentAffairID value(String): 当前点击事务项的ID，在点击事务项按钮时设置，被打开的事务编辑界面获取
  */
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         // Tencent类是SDK的主要实现类，开发者可通过Tencent类访问腾讯开放的OpenAPI。
         // 其中APP_ID是分配给第三方应用的appid，类型为String。
         // 1.4版本:此处需新增参数，传入应用程序的全局context，可通过activity的getApplicationContext方法获取
-        mTencent = Tencent.createInstance("55555", this.getApplicationContext());
+        mTencent = Tencent.createInstance("222222", this.getApplicationContext());
 
     }
 
@@ -187,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
         Log.d(Tag, "onOptionsItemSelected");
         // 社交次数加一
         String currentEmail = preferences.getString("currentEmail", "");
-        editor.putInt(currentEmail+"#socialTimes", preferences.getInt(currentEmail+"#socialTimes", 0)+1);
-        editor.apply();
+        if(currentEmail != ""){
+            editor.putInt(currentEmail+"#socialTimes", preferences.getInt(currentEmail+"#socialTimes", 0)+1);
+            editor.apply();
+        }
         switch (item.getItemId()){
             case R.id.action_share:// 分享按钮
                 doShareToQQ();
