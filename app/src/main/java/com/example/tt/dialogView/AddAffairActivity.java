@@ -71,6 +71,9 @@ public class AddAffairActivity extends AppCompatActivity {
         editor = preferences.edit();
         // 初始化打卡时间
         simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss:SS");// 每个事件的创建时间精确到毫秒，作为事件唯一标识
+        // 初始化事件日期
+        editor.putString("currentAffairDate", "");
+        editor.apply();
 
         // 监听文本框内容变化
         editText.addTextChangedListener(new TextWatcher() {
@@ -112,8 +115,6 @@ public class AddAffairActivity extends AppCompatActivity {
                 }else{
                     // 若选择了日期，直接存储选择的日期
                     editor.putString(currentEmail+"#affairID="+date_str+"#date", currentAffairDate);
-                    // 用完了要清空currentAffairDate数据
-                    editor.putString("currentAffairDate", "");
                 }
                 editor.putBoolean(currentEmail+"#affairID="+date_str+"#status", false); // 初始化事件状态为未完成
                 Log.d("12345", "事件数据已存储");
