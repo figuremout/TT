@@ -18,7 +18,9 @@ Under MIT License.
 |||
 
 ## TODO List [#](#)
-- [ ] Alarm
+- [ ] 设置时间、铃声、重复提醒
+- [ ] 桌面控件
+- [ ] 状态栏推送提醒
 
 ## Note [#](#)
 > All data stored in `data/data/com.example.tt/shared_prefs/shared.xml` with SharedPreferences.
