@@ -42,7 +42,7 @@ public class OutdatedFragment extends Fragment {
     private String currentEmail;
     private String[] affairIDList;
     private ImageView empty_img;
-    private TextView empty_text, item_date, item_title;
+    private TextView empty_text, item_date, item_title, item_content;
     private CheckBox item_check;
     private Boolean isRecycle;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -150,12 +150,13 @@ public class OutdatedFragment extends Fragment {
      * @param affairID
      * @throws ParseException
      */
-    private void  addItem(final String affairID) throws ParseException {
+    private void addItem(final String affairID) throws ParseException {
         final View new_view = View.inflate(getContext(), R.layout.affair_item, null); // getContext()在fragment中获取上下文
-        item_button = new_view.findViewById(R.id.button);
+        item_button = new_view.findViewById(R.id.itemButton);
         item_date = new_view.findViewById(R.id.textView24);
         item_title = new_view.findViewById(R.id.textView23);
         item_check = new_view.findViewById(R.id.checkBox);
+        item_content = new_view.findViewById(R.id.textView6);
 
         // 获取该事务设置的日期，并显示
         String affairDate_str = preferences.getString(currentEmail+"#affairID="+affairID+"#date", "");
@@ -172,6 +173,10 @@ public class OutdatedFragment extends Fragment {
         // 显示事务Title
         String title = preferences.getString(currentEmail+"#affairID="+affairID+"#title", "");
         item_title.setText(title);
+
+        // 显示事务Content
+        String content = preferences.getString(currentEmail+"#affairID="+affairID+"#content", "");
+        item_content.setText(content);
 
         // 将事务ID赋给按钮Text，用于调试，实际字体颜色设为透明不显示
         item_button.setText(affairID);
@@ -208,11 +213,6 @@ public class OutdatedFragment extends Fragment {
                 if(b){
                     // 选中了
                     editor.putBoolean(currentEmail+"#affairID="+affairID+"#status", true);
-                    // 回收模式下，勾选事件直接消失
-                    isRecycle = preferences.getBoolean(currentEmail+"#settings#isRecycle", false);
-                    if(isRecycle){
-                        ll.removeView(new_view);
-                    }
                 }else{
                     // 未选中
                     editor.putBoolean(currentEmail+"#affairID="+affairID+"#status", false);

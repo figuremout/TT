@@ -1,62 +1,66 @@
 package com.example.tt.ui.home;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.tt.LoginActivity;
-import com.example.tt.MainActivity;
 import com.example.tt.R;
 import com.example.tt.dialogView.DeleteAffairActivity;
 import com.example.tt.editAffairActivity;
 import com.example.tt.util.DateUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static java.lang.Thread.sleep;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment
+{
 
     private HomeViewModel homeViewModel;
     private LinearLayout ll;
-    private Button item_button;
+    private Button item_button, delButton, topButton;
     private View root;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String currentEmail;
     private String[] affairIDList;
     private ImageView empty_img;
-    private TextView empty_text, item_date, item_title;
+    private TextView empty_text, item_date, item_title, item_content;
     private CheckBox item_check;
     private Boolean isRecycle;
     private SwipeRefreshLayout swipeRefreshLayout;
+    FloatingActionButton addButton;
+    private static final int FLING_MIN_DISTANCE = 50;   //左右滑动最小距离
+    private static final int FLING_MIN_VELOCITY = 0;  //左右滑动最小速度
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -139,17 +143,20 @@ public class HomeFragment extends Fragment {
                 affairIDList = affairIDList_str.split(",");
                 if(isRecycle){
                     // 回收模式下，只显示未完成事件
+                    Boolean is_empty = true;
                     for (String affairID : affairIDList){
                         if(!preferences.getBoolean(currentEmail+"#affairID="+affairID+"#status", false)){
                             addItem(affairID);
+                            is_empty = false;
                         }
                     }
+                    if_empty(is_empty);
                 }else{
                     for (String affairID : affairIDList){
                         addItem(affairID);
                     }
+                    if_empty(false);
                 }
-                if_empty(false);
             }
         }
     }
@@ -160,12 +167,13 @@ public class HomeFragment extends Fragment {
      * @param affairID
      * @throws ParseException
      */
-    private void  addItem(final String affairID) throws ParseException {
+    private void addItem(final String affairID) throws ParseException {
         final View new_view = View.inflate(getContext(), R.layout.affair_item, null); // getContext()在fragment中获取上下文
-        item_button = new_view.findViewById(R.id.button);
+        item_button = new_view.findViewById(R.id.itemButton);
         item_date = new_view.findViewById(R.id.textView24);
         item_title = new_view.findViewById(R.id.textView23);
         item_check = new_view.findViewById(R.id.checkBox);
+        item_content = new_view.findViewById(R.id.textView6);
 
         // 获取该事务设置的日期，并显示
         String affairDate_str = preferences.getString(currentEmail+"#affairID="+affairID+"#date", "");
@@ -182,6 +190,10 @@ public class HomeFragment extends Fragment {
         // 显示事务Title
         String title = preferences.getString(currentEmail+"#affairID="+affairID+"#title", "");
         item_title.setText(title);
+
+        // 显示事务Content
+        String content = preferences.getString(currentEmail+"#affairID="+affairID+"#content", "");
+        item_content.setText(content);
 
         // 将事务ID赋给按钮Text，用于调试，实际字体颜色设为透明不显示
         item_button.setText(affairID);
@@ -222,6 +234,9 @@ public class HomeFragment extends Fragment {
                     isRecycle = preferences.getBoolean(currentEmail+"#settings#isRecycle", false);
                     if(isRecycle){
                         ll.removeView(new_view);
+                        if (ll.getChildCount()==0){ // 当前列表显示的事务项数为0时
+                            if_empty(true);
+                        }
                     }
                 }else{
                     // 未选中

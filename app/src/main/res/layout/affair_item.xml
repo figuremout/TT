@@ -11,11 +11,11 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/itemButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="@android:color/transparent"
             android:textColor="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@+id/guideline66"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/guideline66"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/itemButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,30 +43,71 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="50dp" />
+            app:layout_constraintGuide_begin="70dp" />
 
         <TextView
             android:id="@+id/textView23"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="3dp"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="@color/darkGray"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline66"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/textView24"
-            app:layout_constraintStart_toStartOf="@+id/button"
+            app:layout_constraintStart_toStartOf="@+id/itemButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView24"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="Date"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:alpha="0.5"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-condensed"
+            android:singleLine="true"
+            android:text="Content"
+            android:textColor="@color/darkGray"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline66"
-            app:layout_constraintEnd_toEndOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/textView24"
+            app:layout_constraintStart_toStartOf="@+id/guideline65"
+            app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+        <Button
+            android:id="@+id/delButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/outofdate"
+            android:text="删除"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@+id/guideline66"
+            app:layout_constraintStart_toEndOf="@+id/topButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/topButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryLight"
+            android:text="置顶"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@+id/guideline66"
+            app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

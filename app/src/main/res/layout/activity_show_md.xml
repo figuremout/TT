@@ -23,6 +23,7 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
+
                 <com.yydcdut.markdown.MarkdownTextView
                     android:id="@+id/txt_md_show"
                     android:layout_width="match_parent"

@@ -126,6 +126,11 @@ public class AddAffairActivity extends AppCompatActivity {
         cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // 收回软键盘
+                InputMethodManager manager = ((InputMethodManager)editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
+                if (manager != null){
+                    manager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 SetCalActivity cal = new SetCalActivity();
                 cal.initCalDialog(context, preferences);
             }

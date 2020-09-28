@@ -1,13 +1,13 @@
 package com.example.tt;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
@@ -17,14 +17,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tt.myView.MyRadarView;
+import com.example.tt.util.myHttp;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import static com.example.tt.util.DateUtil.differentDays;
@@ -46,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Vibrator vibrator; //震动
     private MyRadarView radar;
     private TextView radar_reminder;
+    private ImageView portrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +109,6 @@ public class ProfileActivity extends AppCompatActivity {
         radar_reminder = findViewById(R.id.textView9);
         radar.setData(initRadar());
 
-
         // 初始化软键盘控制
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -115,6 +117,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 初始化震动
         vibrator = (Vibrator)this.getSystemService(this.VIBRATOR_SERVICE);
+
+        // 初始化头像
+        portrait = findViewById(R.id.imageView);
     }
     private void initEvent(){
         // 返回按钮事件
@@ -184,6 +189,26 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;// 过滤单击事件，避免长按时长按事件、单击事件都触发
             }
         });
+
+        portrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 网络请求不能在主线程内，防止页面假死
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Looper.prepare();
+                            Toast.makeText(ProfileActivity.this,myHttp.readContentFromGet("http://www.zjmpage.com:8000/server"),Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+        });
+
     }
 
     /**

@@ -13,11 +13,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.tt.MainActivity;
 import com.example.tt.R;
+import com.example.tt.dialogView.SetCalActivity;
 import com.example.tt.util.Const;
 import com.yydcdut.markdown.MarkdownConfiguration;
 import com.yydcdut.markdown.MarkdownEditText;
@@ -44,13 +48,15 @@ import rx.Subscriber;
  */
 public class editAffairActivity extends AppCompatActivity {
     private MarkdownEditText editContent;
-    private  MarkdownProcessor markdownProcessor;
+    private MarkdownProcessor markdownProcessor;
     private ImageButton back, showMd, helpMd;
     private EditText editTitle;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String currentEmail, currentAffairID, currentAffairTitle, currentAffairContent, userEditContentCache;
     private Boolean helpMd_isShow = false, isRender;
+    private CheckBox item_check;
+    private TextView item_date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +95,13 @@ public class editAffairActivity extends AppCompatActivity {
         // 初始化标题编辑框
         editTitle = findViewById(R.id.editTextTextPersonName);
         editTitle.setText(currentAffairTitle);
+        // 初始化checkbox
+        item_check = findViewById(R.id.checkBox2);
+        final Boolean isChecked = preferences.getBoolean(currentEmail + "#affairID=" + currentAffairID + "#status", false);
+        item_check.setChecked(isChecked);
+        // 初始化日期文本框
+        item_date = findViewById(R.id.textView21);
+        item_date.setText(preferences.getString(currentEmail+"#affairID="+currentAffairID+"#date", ""));
 
         back = findViewById(R.id.imageButton3);
         showMd = findViewById(R.id.showMd_button);
@@ -108,6 +121,21 @@ public class editAffairActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ShowMdActivity.startShowActivity(editAffairActivity.this, editContent.getText().toString(), false);
+            }
+        });
+
+        // checkbox初始化事件
+        item_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    // 选中了
+                    editor.putBoolean(currentEmail+"#affairID="+currentAffairID+"#status", true);
+                }else{
+                    // 未选中
+                    editor.putBoolean(currentEmail+"#affairID="+currentAffairID+"#status", false);
+                }
+                editor.apply();
             }
         });
 
@@ -132,6 +160,7 @@ public class editAffairActivity extends AppCompatActivity {
                 helpMd_isShow = !helpMd_isShow;
             }
         });
+
     }
 
     /**

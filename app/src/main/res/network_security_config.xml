@@ -1,0 +1,15 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">http://www.zjmpage.com</domain>
+    </domain-config>
+</network-security-config>
+    <!--Caused by : java.io.IOException: Cleartext HTTP traffic to “url” not permitted-->
+    <!--    一、问题原因：-->
+
+    <!--    根本原因是从Android9.0开始，出于完全因素考虑，默认不再支持http网络请求，需要使用 https。-->
+
+    <!--    二、解决方案：-->
+
+    <!--    解决的基本思路是：对指定的网址进行过滤，强制允许指定网址继续使用http请求-->
