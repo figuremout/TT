@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TT 服务器测试</title>
+</head>
+<body>
+    <div id="result"></div>
+    <p><b>登录测试</b></p>
+    <form action="http://www.zjmpage.com:8000/login" method="post">
+        邮 箱: <input type="text" name="email">
+        密 码: <input type="password" name="pwd">
+        <button>POST</button><!--button在form内默认提交事件-->
+    </form>
+
+    <p><b>注册测试</b></p>
+    <form action="http://www.zjmpage.com:8000/register" method="post">
+        用户名: <input type="text" name="username">
+        邮 箱: <input type="text" name="email">
+        密 码: <input type="password" name="pwd">
+        <button>POST</button>
+    </form>
+
+    <p><b>添加事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/addOneAffair" method="post">
+        邮 箱: <input type="text" name="email">
+        affairID: <input type="text" name="affairID">
+        标 题: <input type="text" name="title">
+        内 容: <input type="text" name="content">
+        日 期: <input type="text" name="date">
+        状态: <input type="text" name="status">
+        <button>POST</button>
+    </form>
+
+    <p><b>更新事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/updateOneAffair" method="post">
+        邮 箱: <input type="text" name="email">
+        affairID: <input type="text" name="affairID">
+        标 题: <input type="text" name="title">
+        内 容: <input type="text" name="content">
+        状态: <input type="text" name="status">
+        <button>POST</button>
+    </form>
+
+    <p><b>初始化record测试</b></p>
+    <form action="http://www.zjmpage.com:8000/initOneRecord" method="post">
+        邮 箱: <input type="text" name="email">
+        <button>POST</button>
+    </form>
+
+    <p><b>更新signDate测试</b></p>
+    <form action="http://www.zjmpage.com:8000/updateOneSignDate" method="post">
+        邮 箱: <input type="text" name="email">
+        signDate: <input type="text" name="signDate">
+        <button>POST</button>
+    </form>
+
+    <p><b>更新signTimes增1测试</b></p>
+    <form action="http://www.zjmpage.com:8000/updateSignTimes" method="post">
+        邮 箱: <input type="text" name="email">
+        isInc: <input type="text" name="isInc">
+        <button>POST</button>
+    </form>
+
+    <p><b>更新shareTimes增1测试</b></p>
+    <form action="http://www.zjmpage.com:8000/updateShareTimes" method="post">
+        邮 箱: <input type="text" name="email">
+        isInc: <input type="text" name="isInc">
+        <button>POST</button>
+    </form>
+
+    <p><b>查询所有事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getAllAffairs" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询已完成事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getDoneAffairs" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询单项事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getOneAffair" method="get">
+        邮 箱: <input type="text" name="email">
+        affairID: <input type="text" name="affairID">
+        <button>GET</button>
+    </form>
+
+    <p><b>删除单项事务测试</b></p>
+    <form action="http://www.zjmpage.com:8000/deleteOneAffair" method="get">
+        邮 箱: <input type="text" name="email">
+        affairID: <input type="text" name="affairID">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询用户名测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getUsername" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询signDate测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getOneSignDate" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询signTimes测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getOneSignTimes" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <p><b>查询shareTimes测试</b></p>
+    <form action="http://www.zjmpage.com:8000/getOneShareTimes" method="get">
+        邮 箱: <input type="text" name="email">
+        <button>GET</button>
+    </form>
+
+    <script>
+
+    </script>
+</body>
+</html>

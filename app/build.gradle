@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "2.0"
 //        v1.0.0 Alpha 2020.07.08 == 创建项目
 //        v1.0.1 Alpha 2020.07.10 == 实现点击头像跳转到登录界面
 //        v1.1.0 Alpha 2020.07.11 == 完成登录界面原型
