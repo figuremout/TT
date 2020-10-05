@@ -26,9 +26,10 @@ import com.example.tt.R;
 import com.example.tt.SettingsActivity;
 import com.example.tt.ui.home.HomeFragment;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import com.example.tt.util.myHttp;
 /**
  * 注意：
  * 创建本界面时，这个类里的所有函数是不会自动执行的
@@ -100,23 +101,29 @@ public class AddAffairActivity extends AppCompatActivity {
                 date = new Date(System.currentTimeMillis());//获取当前时间
                 date_str = simpleDateFormat.format(date);
                 affairTitle = editText.getText().toString();
-                // 存储进事件ID列表
-                String affairIDList = preferences.getString(currentEmail+"#affairIDList", "");
-                editor.putString(currentEmail+"#affairIDList", affairIDList+date_str+",");
-                // 存储事件标题
-                editor.putString(currentEmail+"#affairID="+date_str+"#title", affairTitle);
                 // 存储事件日期
-                String currentAffairDate = preferences.getString("currentAffairDate", "");
-                if(currentAffairDate.trim().length() == 0){
-                    // 若未手动选择日期，获取当天日期并存储
-                    String affairDate = date_str.split(" ")[0];
-                    // 存储
-                    editor.putString(currentEmail+"#affairID="+date_str+"#date", affairDate);
-                }else{
-                    // 若选择了日期，直接存储选择的日期
-                    editor.putString(currentEmail+"#affairID="+date_str+"#date", currentAffairDate);
-                }
-                editor.putBoolean(currentEmail+"#affairID="+date_str+"#status", false); // 初始化事件状态为未完成
+                final String currentAffairDate = preferences.getString("currentAffairDate", "");
+
+                Thread addAffairThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(currentAffairDate.trim().length() == 0){
+                                // 若未手动选择日期，获取当天日期并存储
+                                String affairDate = date_str.split(" ")[0];
+                                myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
+                                        "&date="+affairDate);
+                            }else{
+                                myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
+                                        "&date="+currentAffairDate);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                addAffairThread.start();
+
                 Log.d("12345", "事件数据已存储");
                 editor.apply();
                 alertDialog_show.dismiss(); // 关闭弹窗

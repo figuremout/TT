@@ -34,6 +34,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import org.json.JSONObject;
 //import com.yydcdut.rxmarkdown.RxMDConfiguration;
+import com.example.tt.util.myHttp;
+
+import java.io.IOException;
 
 /**shared文件
  * key: email#username value(String): email对应的用户名
@@ -186,10 +189,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Log.d(Tag, "onOptionsItemSelected");
         // 社交次数加一
-        String currentEmail = preferences.getString("currentEmail", "");
+        final String currentEmail = preferences.getString("currentEmail", "");
         if(currentEmail != ""){
-            editor.putInt(currentEmail+"#socialTimes", preferences.getInt(currentEmail+"#socialTimes", 0)+1);
-            editor.apply();
+            // 网络请求不能在主线程内，防止页面假死
+            Thread loginThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        myHttp.postHTTPReq("/increaseShareTimes", "email="+currentEmail);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            loginThread.start();
         }
         switch (item.getItemId()){
             case R.id.action_share:// 分享按钮
@@ -304,13 +317,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 登录成功后需要改变界面、控件
      */
-    private void after_login(String email){
+    private void after_login(final String email){
         // 登录按钮消失，个人信息展示
         MainActivity.login_button.setVisibility(View.INVISIBLE);
         MainActivity.username_show.setVisibility(View.VISIBLE);
         MainActivity.email_show.setVisibility(View.VISIBLE);
-        String username = preferences.getString(email+"#username", "");
-        MainActivity.username_show.setText(username);
+        final String[] username = {""};
         MainActivity.email_show.setText(email);
 
         // 头像点击事件重写
@@ -323,6 +335,25 @@ public class MainActivity extends AppCompatActivity {
         });
         // 头像图片
         MainActivity.login_img.setImageResource(R.drawable.logged_user);
+
+        Thread getUsernameThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getUsernameThread.start();
+        try {
+            getUsernameThread.join();
+            MainActivity.username_show.setText(username[0]);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
     }
 }
 

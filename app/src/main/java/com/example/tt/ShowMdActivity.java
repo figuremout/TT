@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tt.util.OKLoader;
+import com.example.tt.util.myHttp;
 import com.google.android.material.snackbar.Snackbar;
 import com.yydcdut.markdown.MarkdownConfiguration;
 import com.yydcdut.markdown.MarkdownProcessor;
@@ -29,7 +30,10 @@ import com.yydcdut.markdown.loader.MDImageLoader;
 import com.yydcdut.markdown.syntax.text.TextFactory;
 import com.yydcdut.markdown.theme.ThemeSunburst;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.io.IOException;
 
 /**
  * 观察模式
@@ -74,14 +78,32 @@ public class ShowMdActivity extends AppCompatActivity {
 
         close = findViewById(R.id.imageButton2);
 
-        // 显示事件标题，用户名+事件日期
-        showMd_title = findViewById(R.id.textView3);
-        showMd_title.setText(preferences.getString(currentEmail+"#affairID="+currentAffairID+"#title", ""));
-        showMd_username_date = findViewById(R.id.textView4);
-        showMd_username_date.setText(
-                preferences.getString(currentEmail+"#username", "")+
-                        " - "+
-                preferences.getString(currentEmail+"#affairID="+currentAffairID+"#date", ""));
+        final String[] doc_str = new String[1];
+        final JSONObject[] doc = new JSONObject[1];
+        final String[] username = new String[1];
+        Thread getOneAffairThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
+                    username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
+                    doc[0] = myHttp.getJsonObject(doc_str[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getOneAffairThread.start();
+        try {
+            getOneAffairThread.join();
+            // 显示事件标题，用户名+事件日期
+            showMd_title = findViewById(R.id.textView3);
+            showMd_title.setText(doc[0].getString("title"));
+            showMd_username_date = findViewById(R.id.textView4);
+            showMd_username_date.setText(username[0]+ " - "+ doc[0].getString("date"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     private void initEvent(){
         close.setOnClickListener(new View.OnClickListener() {

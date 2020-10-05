@@ -24,7 +24,12 @@ import com.example.tt.R;
 import com.example.tt.dialogView.DeleteAffairActivity;
 import com.example.tt.editAffairActivity;
 import com.example.tt.util.DateUtil;
+import com.example.tt.util.myHttp;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,7 +45,6 @@ public class OutdatedFragment extends Fragment {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String currentEmail;
-    private String[] affairIDList;
     private ImageView empty_img;
     private TextView empty_text, item_date, item_title, item_content;
     private CheckBox item_check;
@@ -73,7 +77,6 @@ public class OutdatedFragment extends Fragment {
         preferences = requireActivity().getSharedPreferences("shared", MODE_PRIVATE);
         editor = preferences.edit();
         currentEmail = preferences.getString("currentEmail", "");
-        affairIDList = preferences.getString(currentEmail+"#affairIDList", "").split(",");
 
         // 事务列表为空的提示
         empty_img = root.findViewById(R.id.imageView11);
@@ -118,26 +121,46 @@ public class OutdatedFragment extends Fragment {
             if_empty(true);
         }else{
             // 已登录
-            String affairIDList_str = preferences.getString(currentEmail+"#affairIDList", "");
-            if(affairIDList_str.trim().length()==0){
+            final String[] affairList_str = new String[1];
+            final JSONArray[] affairsArray = new JSONArray[1];
+            Thread getAllAffairsThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
+                        affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            getAllAffairsThread.start();
+            try {
+                getAllAffairsThread.join();
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            if(affairsArray[0].length()==0){
                 // 该账户尚无事务，避免用空字符串创建一个事务
                 if_empty(true);
                 return;
             }else{
                 // 该账户已有事务，获取所有过期事务并显示
                 if_empty(true);
-                affairIDList = affairIDList_str.split(",");
-                for (String affairID : affairIDList){
-                    // 获取该事务设置的日期
-                    String affairDate_str = preferences.getString(currentEmail+"#affairID="+affairID+"#date", "");
-                    // 获取当前日期，判断该事务是否已过期
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-                    Date date = new Date(System.currentTimeMillis());//获取当前时间
-                    Date affairDate = simpleDateFormat.parse(affairDate_str);
-                    if(DateUtil.differentDays(date, affairDate) < 0){
-                        // 事务已过期
-                        addItem(affairID);
-                        if_empty(false);
+                for (int i = 0; i < affairsArray[0].length(); i++){
+                    try {
+                        JSONObject affair = affairsArray[0].getJSONObject(i);
+                        // 获取当前日期，判断该事务是否已过期
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                        Date date = new Date(System.currentTimeMillis());//获取当前时间
+                        Date affairDate = simpleDateFormat.parse(affair.getString("date"));
+                        if(DateUtil.differentDays(date, affairDate) < 0){
+                            // 事务已过期
+                            addItem(affair.getString("affairID"));
+                            if_empty(false);
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
                     }
                 }
             }
@@ -158,25 +181,58 @@ public class OutdatedFragment extends Fragment {
         item_check = new_view.findViewById(R.id.checkBox);
         item_content = new_view.findViewById(R.id.textView6);
 
-        // 获取该事务设置的日期，并显示
-        String affairDate_str = preferences.getString(currentEmail+"#affairID="+affairID+"#date", "");
-        item_date.setText(affairDate_str);
-        // 获取当前日期，判断该事务是否已过期
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-        Date date = new Date(System.currentTimeMillis());//获取当前时间
-        Date affairDate = simpleDateFormat.parse(affairDate_str);
-        if(DateUtil.differentDays(date, affairDate) < 0){
-            // 事务已过期
-            item_date.setTextColor(getResources().getColor(R.color.outofdate));
+        final String[] affair_str = new String[1];
+        final JSONObject[] affair = new JSONObject[1];
+        Thread getOneAffairThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    affair_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
+                    affair[0] = myHttp.getJsonObject(affair_str[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getOneAffairThread.start();
+        try {
+            getOneAffairThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        // 显示事务Title
-        String title = preferences.getString(currentEmail+"#affairID="+affairID+"#title", "");
-        item_title.setText(title);
+        // 获取该事务设置的日期，并显示
+        try {
+            String affairDate_str = affair[0].getString("date");
+            item_date.setText(affairDate_str);
+            // 获取当前日期，判断该事务是否已过期
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+            Date date = new Date(System.currentTimeMillis());//获取当前时间
+            Date affairDate = simpleDateFormat.parse(affairDate_str);
+            if(DateUtil.differentDays(date, affairDate) < 0){
+                // 事务已过期
+                item_date.setTextColor(getResources().getColor(R.color.outofdate));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
-        // 显示事务Content
-        String content = preferences.getString(currentEmail+"#affairID="+affairID+"#content", "");
-        item_content.setText(content);
+
+        try {
+            // 显示事务Title
+            String title = affair[0].getString("title");
+            item_title.setText(title);
+
+            // 显示事务Content
+            String content = affair[0].getString("content");
+            item_content.setText(content);
+
+            // checkBox初始化
+            final Boolean isChecked = Boolean.parseBoolean(affair[0].getString("status"));
+            item_check.setChecked(isChecked);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         // 将事务ID赋给按钮Text，用于调试，实际字体颜色设为透明不显示
         item_button.setText(affairID);
@@ -205,17 +261,45 @@ public class OutdatedFragment extends Fragment {
         });
 
         // checkbox初始化
-        final Boolean isChecked = preferences.getBoolean(currentEmail + "#affairID=" + affairID + "#status", false);
-        item_check.setChecked(isChecked);
         item_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     // 选中了
-                    editor.putBoolean(currentEmail+"#affairID="+affairID+"#status", true);
+                    Thread updateOneAffairThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=true");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    updateOneAffairThread.start();
+
+                    // 回收模式下，勾选事件直接消失
+                    isRecycle = preferences.getBoolean(currentEmail+"#settings#isRecycle", false);
+                    if(isRecycle){
+                        ll.removeView(new_view);
+                        if (ll.getChildCount()==0){ // 当前列表显示的事务项数为0时
+                            if_empty(true);
+                        }
+                    }
                 }else{
                     // 未选中
-                    editor.putBoolean(currentEmail+"#affairID="+affairID+"#status", false);
+                    ll.removeView(new_view);
+                    Thread updateOneAffairThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=false");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    updateOneAffairThread.start();
                 }
                 editor.apply();
             }

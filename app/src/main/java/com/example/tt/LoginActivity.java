@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,7 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.regex.*;
+
+import com.example.tt.util.myHttp;
 
 /**
  * 登录、注册是使用SharedPreference实现的伪登录注册，账号在本地持久化存储
@@ -96,8 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = login_email.getText().toString();
-                String pwd = login_pwd.getText().toString();
+                final String email = login_email.getText().toString();
+                final String pwd = login_pwd.getText().toString();
                 if(email.trim().length()==0){
                     login_email.setError(getResources().getString(R.string.emptyEmail));
                     return;
@@ -107,22 +111,22 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 判断邮箱是否已存在
-                String is_exist = preferences.getString(email+"#username", "");
-                if(is_exist.trim().length()==0){
-                    login_email.setError(getResources().getString(R.string.accountNotExist));
-                    return;
-                }else{
-                    // 判断邮箱是否合法
-                    String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-                    boolean is_mail = Pattern.matches(email_pattern, email);
-                    if(!is_mail){
-                        login_email.setError(getResources().getString(R.string.illegalEmail));
-                        login_email.setText("");
-                        return;
+                final Boolean[] isSuccess = {false};
+                // 网络请求不能在主线程内，防止页面假死
+                Thread loginThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/login", "email="+email+"&pwd="+pwd));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    String correct_pwd = preferences.getString(email+"#pwd", "");
-                    if(pwd.equals(correct_pwd)){
+                });
+                loginThread.start();
+                try {
+                    loginThread.join();
+                    if(isSuccess[0]){
                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.loginSuccess), Toast.LENGTH_SHORT).show();
                         // 写入currentEmail
                         editor.putString("currentEmail", email);
@@ -134,6 +138,8 @@ public class LoginActivity extends AppCompatActivity {
                     }else{
                         login_pwd.setError(getResources().getString(R.string.wrongPassword));
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -142,9 +148,9 @@ public class LoginActivity extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = register_name.getText().toString();
-                String email = register_email.getText().toString();
-                String pwd = register_pwd.getText().toString();
+                final String username = register_name.getText().toString();
+                final String email = register_email.getText().toString();
+                final String pwd = register_pwd.getText().toString();
 
                 if(username.trim().length()==0){
                     register_name.setError(getResources().getString(R.string.emptyUsername));
@@ -159,34 +165,46 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 判断邮箱是否已注册
-                String is_exist = preferences.getString(email+"#username", "");
-                if(is_exist.trim().length()==0){
-                    // 判断邮箱是否合法
-                    String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-                    boolean is_mail = Pattern.matches(email_pattern, email);
-                    if(!is_mail){
-                        register_email.setError(getResources().getString(R.string.illegalEmail));
-                        register_email.setText("");
-                        return;
-                    }
-                    // 以邮箱为唯一标识，存储账号信息
-                    editor.putString(email+"#username", username);
-                    editor.putString(email+"#pwd", pwd);
-                    editor.apply();
-                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.registerSuccess), Toast.LENGTH_SHORT).show();
 
-                    // 自动填充信息到登录界面
-                    switch_to_signin();
-                    login_email.setText(email);
-                    login_pwd.setText(pwd);
-                }else{
-                    // 该邮箱已注册
-                    register_email.setError(getResources().getString(R.string.emailExist));
+                // 判断邮箱是否合法
+                String email_pattern = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+                boolean is_mail = Pattern.matches(email_pattern, email);
+                if(!is_mail){
+                    register_email.setError(getResources().getString(R.string.illegalEmail));
                     register_email.setText("");
+                    return;
                 }
 
+                final Boolean[] isSuccess = {false};
+                // 网络请求不能在主线程内，防止页面假死
+                Thread registerThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/register", "username="+username+"&email="+email+"&pwd="+pwd));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
 
+                registerThread.start();
+                try {
+                    registerThread.join();
+                    if(isSuccess[0]){
+                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.registerSuccess), Toast.LENGTH_SHORT).show();
+                        // 自动填充信息到登录界面
+                        switch_to_signin();
+                        login_email.setText(email);
+                        login_pwd.setText(pwd);
+                    }else{
+                        // 该邮箱已注册
+                        register_email.setError(getResources().getString(R.string.emailExist));
+                        register_email.setText("");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

@@ -99,9 +99,28 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 设置email和username
         email = findViewById(R.id.profile_email);
-        String currentEmail = preferences.getString("currentEmail", "");
+        final String currentEmail = preferences.getString("currentEmail", "");
         email.setText(currentEmail);
-        edit_username.setText(preferences.getString(currentEmail+"#username", ""));
+
+        // 初始化用户名
+        final String[] username = {""};
+        Thread getUsernameThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getUsernameThread.start();
+        try {
+            getUsernameThread.join();
+            edit_username.setText(username[0]);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
         edit_username.setBackground(null); // 去除下划线
 
         // 初始化雷达图
@@ -153,12 +172,22 @@ public class ProfileActivity extends AppCompatActivity {
                     // 隐藏软键盘
                     imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                     // 保存数据
-                    String new_username = edit_username.getText().toString();
+                    final String new_username = edit_username.getText().toString();
                     currentEmail = preferences.getString("currentEmail", "");
-                    editor.putString(currentEmail+"#username", new_username);
-                    editor.apply();
                     // 刷新各界面上的旧用户名
                     MainActivity.username_show.setText(new_username);
+
+                    Thread updateUsernameThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myHttp.postHTTPReq("/updateUsername", "email="+currentEmail+"&username="+new_username);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    updateUsernameThread.start();
                 }else{
                     // 不是编辑状态，要变成编辑状态
                     edit_username_img.setImageResource(R.drawable.submit);
@@ -168,9 +197,25 @@ public class ProfileActivity extends AppCompatActivity {
                     imm.showSoftInput(edit_username, 0);
                     // 编辑框内容初始化为当前用户名，并将光标移动到最后
                     currentEmail = preferences.getString("currentEmail", "");
-                    String username_str = preferences.getString(currentEmail+"#username", "");
-                    edit_username.setText(username_str);
-                    edit_username.setSelection(edit_username.getText().length());
+                    final String[] username = {""};
+                    Thread getUsernameThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    getUsernameThread.start();
+                    try {
+                        getUsernameThread.join();
+                        edit_username.setText(username[0]);
+                        edit_username.setSelection(edit_username.getText().length());
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -199,7 +244,7 @@ public class ProfileActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             Looper.prepare();
-                            Toast.makeText(ProfileActivity.this,myHttp.readContentFromGet("http://www.zjmpage.com:8000/server"),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, myHttp.postHTTPReq("/login", "email=zjm&pwd=adminpwd"),Toast.LENGTH_SHORT).show();
                             Looper.loop();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -236,8 +281,24 @@ public class ProfileActivity extends AppCompatActivity {
      * 打卡后当日会保持已打卡状态
      */
     private void keep_signed() throws ParseException {
-        String signDate = preferences.getString(currentEmail+"#signDate", "");
-        if(signDate.equals(date_str)){
+        final String[] signDate = new String[1];
+        Thread getSignDateThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    signDate[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getSignDateThread.start();
+        try {
+            getSignDateThread.join();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        if(signDate[0].equals(date_str)){
             // 当日已打卡
             after_sign();
         }else{
@@ -261,32 +322,100 @@ public class ProfileActivity extends AppCompatActivity {
         fingerprint.setEnabled(false);// setClickable(false)仍会显示点击效果
         // 更新最近打卡日期和连续打卡数
         int period;
-        String last_sign_date_str = preferences.getString(currentEmail+"#signDate", "");
-        if(last_sign_date_str == ""){
+        final String[] last_sign_date_str = new String[1];
+        Thread getSignDateThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    last_sign_date_str[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getSignDateThread.start();
+        try {
+            getSignDateThread.join();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        if(last_sign_date_str[0] == ""){
             // 第一次打卡值为空
             period = -1;
         }else{
-            Date last_sign_date = simpleDateFormat.parse(last_sign_date_str); //将日期字符串解析为Date对象
+            Date last_sign_date = simpleDateFormat.parse(last_sign_date_str[0]); //将日期字符串解析为Date对象
             period = differentDays(last_sign_date, date);
         }
-        int times = preferences.getInt(currentEmail+"#signTimes", 0);
+
+        final int[] times = new int[1];
+        Thread getSignTimesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    times[0] = Integer.parseInt(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getSignTimesThread.start();
+        try {
+            getSignTimesThread.join();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
         if(period == 1 || period == -1){
             // 若相隔1天或第一次打卡，连续打卡数加一
-            editor.putInt(currentEmail+"#signTimes", ++times);
+            times[0]++;
+            Thread updateSignTimesThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=true");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            updateSignTimesThread.start();
+
         }else if(period == 0){
             // 当天已签到，但初始化打卡界面时仍要呼叫after_sign()函数
             // 连续打卡日数不变，因此times值不变
         }
         else{
             // 若相隔多天，连续打卡数清空，加上本次打卡
-            times = 1;
-            editor.putInt(currentEmail+"#signTimes", times);
+            times[0] = 1;
+            Thread updateSignTimesThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=false");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            updateSignTimesThread.start();
         }
-        editor.putString(currentEmail+"#signDate", date_str);
+        Thread updateSignDateThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    myHttp.postHTTPReq("/updateOneSignDate", "email="+currentEmail+"&signDate="+date_str);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        updateSignDateThread.start();
+
         editor.apply();
         // 设置UI上的距离上次打卡日数和连续打卡数
         since_last_sign.setText(period+"");
-        continuous_times.setText(times+"");
+        continuous_times.setText(times[0]+"");
     }
 
     private double[] initRadar(){

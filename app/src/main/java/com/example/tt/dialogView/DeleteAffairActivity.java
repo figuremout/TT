@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tt.R;
+import com.example.tt.util.myHttp;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class DeleteAffairActivity extends AppCompatActivity {
 
@@ -35,10 +40,29 @@ public class DeleteAffairActivity extends AppCompatActivity {
         currentEmail = preferences.getString("currentEmail", "");
         editor = preferences.edit();
 
-        // 设置事件标题
-        title_text.setText("Title: "+preferences.getString(currentEmail+"#affairID="+affairID+"#title", ""));
-        // 设置事件ID
-        id_text.setText("AffairID: "+ affairID);
+        final String[] doc_str = new String[1];
+        final JSONObject[] doc = new JSONObject[1];
+        Thread getOneAffairThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
+                    doc[0] = myHttp.getJsonObject(doc_str[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getOneAffairThread.start();
+        try {
+            getOneAffairThread.join();
+            // 设置事件标题
+            title_text.setText("Title: "+doc[0].getString("title"));
+            // 设置事件ID
+            id_text.setText("AffairID: "+ affairID);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         // 设置并展示弹窗
         alertDialog = new AlertDialog.Builder(context);
@@ -48,24 +72,17 @@ public class DeleteAffairActivity extends AppCompatActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        editor.remove(currentEmail+"#affairID="+affairID+"#title");
-                        editor.remove(currentEmail+"#affairID="+affairID+"#content");
-                        editor.remove(currentEmail+"#affairID="+affairID+"#date");
-                        editor.remove(currentEmail+"#affairID="+affairID+"#status");
-                        String[] affairIDList = preferences.getString(currentEmail+"#affairIDList", "").split(",");
-                        String new_affairIDList = "";
-                        for (String id:affairIDList){
-                            if(id.equals(affairID)){
-                                // 不将删除事务ID加入新affairIDList
-                            }else{
-                                // 其他事务仍加入新affairIDList
-                                new_affairIDList = new_affairIDList+id+",";
+                        Thread getOneAffairThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    myHttp.getHTTPReq("/deleteOneAffair?email="+currentEmail+"&affairID="+affairID);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        }
-                        editor.putString(currentEmail+"#affairIDList", new_affairIDList);
-                        // 删除事务总数加一
-                        editor.putInt(currentEmail+"#delAffairNum", preferences.getInt(currentEmail+"#delAffairNum", 0)+1);
-                        editor.apply();
+                        });
+                        getOneAffairThread.start();
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消

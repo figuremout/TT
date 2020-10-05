@@ -104,12 +104,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(SettingsActivity.this, "We will reply you as soon as possible!", Toast.LENGTH_SHORT).show();
-                // 社交次数加一
-                String currentEmail = preferences.getString("currentEmail", "");
-                if(currentEmail != ""){
-                    editor.putInt(currentEmail+"#socialTimes", preferences.getInt(currentEmail+"#socialTimes", 0)+1);
-                    editor.apply();
-                }
                 // 跳转网页
                 Intent intent= new Intent();
                 intent.setAction("android.intent.action.VIEW");

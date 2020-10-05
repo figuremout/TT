@@ -23,6 +23,7 @@ import com.example.tt.MainActivity;
 import com.example.tt.R;
 import com.example.tt.dialogView.SetCalActivity;
 import com.example.tt.util.Const;
+import com.example.tt.util.myHttp;
 import com.yydcdut.markdown.MarkdownConfiguration;
 import com.yydcdut.markdown.MarkdownEditText;
 import com.yydcdut.markdown.MarkdownProcessor;
@@ -31,6 +32,8 @@ import com.yydcdut.markdown.callback.OnTodoClickCallback;
 import com.yydcdut.markdown.loader.DefaultLoader;
 import com.yydcdut.markdown.syntax.edit.EditFactory;
 import com.yydcdut.markdown.theme.ThemeDefault;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,7 +57,7 @@ public class editAffairActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String currentEmail, currentAffairID, currentAffairTitle, currentAffairContent, userEditContentCache;
-    private Boolean helpMd_isShow = false, isRender;
+    private Boolean helpMd_isShow = false, isRender, isChecked;
     private CheckBox item_check;
     private TextView item_date;
     @Override
@@ -84,8 +87,34 @@ public class editAffairActivity extends AppCompatActivity {
         editor = preferences.edit();
         currentEmail = preferences.getString("currentEmail", "");
         currentAffairID = preferences.getString("currentAffairID", "");
-        currentAffairTitle = preferences.getString(currentEmail+"#affairID="+currentAffairID+"#title", "");
-        currentAffairContent = preferences.getString(currentEmail+"#affairID="+currentAffairID+"#content", "");
+
+        final String[] doc_str = new String[1];
+        final JSONObject[] doc = new JSONObject[1];
+        Thread getOneAffairThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
+                    doc[0] = myHttp.getJsonObject(doc_str[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getOneAffairThread.start();
+        try {
+            getOneAffairThread.join();
+            currentAffairTitle = doc[0].getString("title");
+            currentAffairContent = doc[0].getString("content");
+            isChecked = doc[0].getBoolean("status");
+
+            // 初始化日期文本框
+            item_date = findViewById(R.id.textView21);
+            item_date.setText(doc[0].getString("date"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         isRender = preferences.getBoolean(currentEmail+"#settings#isRender", false);
 
         // 初始化内容编辑框
@@ -97,11 +126,8 @@ public class editAffairActivity extends AppCompatActivity {
         editTitle.setText(currentAffairTitle);
         // 初始化checkbox
         item_check = findViewById(R.id.checkBox2);
-        final Boolean isChecked = preferences.getBoolean(currentEmail + "#affairID=" + currentAffairID + "#status", false);
         item_check.setChecked(isChecked);
-        // 初始化日期文本框
-        item_date = findViewById(R.id.textView21);
-        item_date.setText(preferences.getString(currentEmail+"#affairID="+currentAffairID+"#date", ""));
+
 
         back = findViewById(R.id.imageButton3);
         showMd = findViewById(R.id.showMd_button);
@@ -130,10 +156,30 @@ public class editAffairActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     // 选中了
-                    editor.putBoolean(currentEmail+"#affairID="+currentAffairID+"#status", true);
+                    Thread updateOneAffairThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=true");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    updateOneAffairThread.start();
                 }else{
                     // 未选中
-                    editor.putBoolean(currentEmail+"#affairID="+currentAffairID+"#status", false);
+                    Thread updateOneAffairThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=false");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    updateOneAffairThread.start();
                 }
                 editor.apply();
             }
@@ -212,9 +258,12 @@ public class editAffairActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // 结束编辑页面活动时保存内容
-                editor.putString(currentEmail+"#affairID="+currentAffairID+"#title", editTitle.getText().toString());
-                editor.putString(currentEmail+"#affairID="+currentAffairID+"#content", editContent.getText().toString());
-                editor.apply();
+                try {
+                    myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+
+                            "&title="+editTitle.getText().toString()+"&content="+editContent.getText().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
         super.onPause();
@@ -240,6 +289,5 @@ public class editAffairActivity extends AppCompatActivity {
         super.onStop();
         Log.d("12345", "Stopedit");
     }
-
 
 }

@@ -27,7 +27,6 @@ public class SetCalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_cal);
     }
 
-
     /**
      * 初始化日历弹窗，在AddAffairActivity中调用
      */
@@ -35,9 +34,6 @@ public class SetCalActivity extends AppCompatActivity {
         View view2 = View.inflate(context, R.layout.activity_set_cal, null);
         // 初始化控件
         final CalendarView calendarView = view2.findViewById(R.id.calendarView);
-        Button setTimeButton = view2.findViewById(R.id.button8);
-        Button setAlarmButton = view2.findViewById(R.id.button9);
-        Button setRepeatButton = view2.findViewById(R.id.button10);
         // 初始化SharedPreferences
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -71,14 +67,6 @@ public class SetCalActivity extends AppCompatActivity {
                     day = Integer.toString(i2);
                 }
                 editor.putString("currentAffairDate", i+"."+month+"."+day);
-            }
-        });
-
-        // 点击设置提醒按钮事件
-        setAlarmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
