@@ -22,7 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tt.myView.MyRadarView;
+import com.example.tt.util.DateUtil;
 import com.example.tt.util.myHttp;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -234,26 +238,6 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;// 过滤单击事件，避免长按时长按事件、单击事件都触发
             }
         });
-
-        portrait.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 网络请求不能在主线程内，防止页面假死
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Looper.prepare();
-                            Toast.makeText(ProfileActivity.this, myHttp.postHTTPReq("/login", "email=zjm&pwd=adminpwd"),Toast.LENGTH_SHORT).show();
-                            Looper.loop();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            }
-        });
-
     }
 
     /**
@@ -419,32 +403,68 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private double[] initRadar(){
-        String[] affairIDList = preferences.getString(currentEmail+"#affairIDList", "").split(",");
-        // 事务总数：当前保存的所有事务的数量 反映用户忙闲
-        double affairNum = affairIDList.length;//affairIDList末尾有一个,使得事务数多一，但不能减去，避免完成率、删除率除零
+        // 获取当前日期，判断该事务是否已过期
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        Date date = new Date(System.currentTimeMillis());//获取当前时间
+
+        final String[] affairList_str = new String[1];
+        final JSONArray[] affairsArray = new JSONArray[1];
         // 打卡考勤：连续打卡次数
-        double signTimes = preferences.getInt(currentEmail+"#signTimes", 0);
+        final double[] signTimes = new double[1];
+        // 乐于分享：qq空间分享数+qq聊天次数
+        final double[] shareTimes = new double[1];
+        Thread updateSignTimesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    signTimes[0] = Double.parseDouble(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
+                    affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
+                    affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
+                    shareTimes[0] = Double.parseDouble(myHttp.getHTTPReq("getOneShareTimes?email="+currentEmail));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        updateSignTimesThread.start();
+        try {
+            updateSignTimesThread.join();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+        // 事务总数：当前保存的所有事务的数量 反映用户忙闲
+        final double affairNum = affairsArray[0].length()+1;//避免完成率、删除率除零
         // 事务完成率：已完成事务/事务总数
+        // 事务过期率
         int done_affairNum = 0;
-        for(String affairID:affairIDList){
-            if(preferences.getBoolean(currentEmail+"#affairID="+affairID+"#status", false)){
-                done_affairNum++;
+        int outdated_affairNum = 0;
+        for (int i = 0; i < affairsArray[0].length(); i++){
+            try {
+                JSONObject affair = affairsArray[0].getJSONObject(i);
+                if(affair.getBoolean("status")){
+                    done_affairNum++;
+                }
+                Date affairDate = simpleDateFormat.parse(affair.getString("date"));
+                if(DateUtil.differentDays(date, affairDate) < 0){
+                    // 事务已过期
+                    outdated_affairNum++;
+                }
+            }catch(Exception e){
+                e.printStackTrace();
             }
         }
         double done_rate = (done_affairNum / affairNum)*100;
-        // 内存洁癖：删除事务数/删除事务数+事务总数
-        int del_affairNum = preferences.getInt(currentEmail+"#delAffairNum", 0);
-        double del_rate = del_affairNum / (del_affairNum+affairNum) * 100;
-        // 乐于分享：qq空间分享数+qq聊天次数
-        double socialTimes = preferences.getInt(currentEmail+"#socialTimes", 0);
+        double outdated_rate = (outdated_affairNum / affairNum)*100;
+        System.out.println("doneNum: "+done_affairNum+"outNum: "+ outdated_affairNum+"total: "+ affairNum);
+
 
         // 处理成适合显示的大小
         double[] data = new double[5];
         data[0] = (affairNum+50)/100<1 ? affairNum+50:100;
-        data[1] = (signTimes*5+50)/100<1 ? signTimes*5+50:100;
+        data[1] = (signTimes[0] *5+50)/100<1 ? signTimes[0] *5+50:100;
         data[2] = done_rate==0 ? 50:done_rate;
-        data[3] = del_rate==0 ? 50:del_rate;
-        data[4] = (socialTimes*5+50)/100<1 ? socialTimes*5+50:100;
+        data[3] = outdated_rate==0 ? 50:outdated_rate;
+        data[4] = (shareTimes[0]*5+50)/100<1 ? shareTimes[0]*5+50:100;
         for(int i = 0; i < data.length; i++){
             Log.d("12345", "radar"+i+": "+data[i]);
         }
@@ -470,7 +490,7 @@ public class ProfileActivity extends AppCompatActivity {
                 radar_reminder.setText(R.string.low_doneRate);
                 break;
             case 3:
-                radar_reminder.setText(R.string.low_delRate);
+                radar_reminder.setText(R.string.low_outdatedRate);
                 break;
             case 4:
                 radar_reminder.setText(R.string.low_socialTimes);

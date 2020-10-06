@@ -57,12 +57,12 @@ public class MyRadarView extends View {
     private String[] titles = {getResources().getString(R.string.affairNum),
             getResources().getString(R.string.signTimes),
             getResources().getString(R.string.doneRate),
-            getResources().getString(R.string.delRate),
+            getResources().getString(R.string.outdatedRate),
             getResources().getString(R.string.socialTimes)};
     // 事务总数：当前保存的所有事务的数量 反映用户忙闲
     // 打卡考勤：连续打卡次数
     // 事务完成率：已完成事务/事务总数
-    // 内存洁癖：删除事务数/删除事务数+事务总数
+    // 事务过期率：过期事务/事务总数
     // 乐于分享：qq空间分享数+qq聊天次数
 
     /**

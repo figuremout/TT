@@ -1,0 +1,12 @@
+{
+  "name": "tt-server",
+  "version": "1.0.0",
+  "description": "<!-- * key: email#username value(String): email对应的用户名\r  * key: email#pwd value(String): email对应的密码 -->\r  * key: currentEmail value(String): 当前登录账号的邮箱\r  <!-- * key: email#signDate value(String): email对应的最近打卡日期\r  * key: email#signTimes value(Int): email对应的连续打卡次数\r  * key: email#delAffairNum value(Int): email对应的删除事务数\r  * key: email#socialTimes value(Int): email对应的分享次数 -->\r  * key: email#settings#isRender value(Boolean): email对应账户的实时渲染设置\r  * key: email#settings#isRecycle value(Boolean): email对应账户的自动回收设置\r  <!-- * key: email#affairID=(事件创建时间)#title value(String): email对应账户下标识为affairID的事件标题\r  * key: email#affairID=(事件创建时间)#content value(String): email对应账户下标识为affairID的事件内容 xxxxx\r  * key: email#affairID=(事件创建时间)#date value(String): email对应账户下标识为affairID的事件日期\r  * key: email#affairID=(事件创建时间)#status value(Boolean): email对应账户下标识为affairID的事件是否完成(true 已完成，false 未完成) -->\r  <!-- * key: email#affairIDList value(String[]): email对应账户下注册的所有事件affairID(事件创建时间,...) -->\r  * key: currentAffairDate value(String): 当前编辑事务的日期，用于人工选择日期界面暂时存储\r  * key: currentAffairID value(String): 当前点击事务项的ID，在点击事务项按钮时设置，被打开的事务编辑界面获取",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

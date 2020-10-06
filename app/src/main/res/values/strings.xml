@@ -42,12 +42,12 @@
     <string name="low_affairNum">Record more affair!</string>
     <string name="low_signTimes">Sign the day helps a lot!</string>
     <string name="low_doneRate">Lazy pig...</string>
-    <string name="low_delRate">Clean more often!</string>
+    <string name="low_outdatedRate">You are self disciplined, well-done!</string>
     <string name="low_socialTimes">Share this app, please</string>
     <string name="affairNum">Affair Amount</string>
     <string name="signTimes">Sign Times</string>
     <string name="doneRate">Done Rate</string>
-    <string name="delRate">Memory Puritanism</string>
+    <string name="outdatedRate">Outdated Rate</string>
     <string name="socialTimes">Social Star</string>
     <string name="logout">Log out</string>
     <string name="newAffair">New Affair</string>

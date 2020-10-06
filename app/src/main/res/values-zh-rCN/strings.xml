@@ -63,4 +63,6 @@
     <string name="registerSuccess">注册成功！</string>
     <string name="emailExist">邮箱已注册！</string>
     <string name="delAffair">删除事务</string>
+    <string name="low_outdatedRate">你非常自律哦，继续加油！</string>
+    <string name="outdatedRate">事务过期率</string>
 </resources>

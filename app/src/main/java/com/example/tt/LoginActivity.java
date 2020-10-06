@@ -182,12 +182,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/register", "username="+username+"&email="+email+"&pwd="+pwd));
+                            myHttp.postHTTPReq("/initOneRecord", "email="+email);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 });
-
                 registerThread.start();
                 try {
                     registerThread.join();
@@ -323,13 +323,30 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 登录成功后需要改变界面、控件
      */
-    private void after_login(String email){
+    private void after_login(final String email){
         // 登录按钮消失，个人信息展示
         MainActivity.login_button.setVisibility(View.INVISIBLE);
         MainActivity.username_show.setVisibility(View.VISIBLE);
         MainActivity.email_show.setVisibility(View.VISIBLE);
-        String username = preferences.getString(email+"#username", "");
-        MainActivity.username_show.setText(username);
+        final String[] username = new String[1];
+
+        Thread getUsernameThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        getUsernameThread.start();
+        try {
+            getUsernameThread.join();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        MainActivity.username_show.setText(username[0]);
         MainActivity.email_show.setText(email);
 
         // 头像点击事件重写

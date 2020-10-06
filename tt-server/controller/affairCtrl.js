@@ -2,6 +2,15 @@ const affairDao = require('../dao/affairDao');
 
 module.exports = {
     // GET
+    /**
+     * @api {get} /getAllAffairs? 请求所有事务
+     * @apiName getAllAffairs
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     *
+     * @apiSuccess {String} docs 所有事务的JSONArray字符串形式
+     */
     getAllAffairs(req, resp){
         console.log('路由getAllAffairs成功');
         var email = req.query.email;
@@ -13,6 +22,15 @@ module.exports = {
             }
         })
     },
+    /**
+     * @api {get} /getDoneAffairs? 请求所有已完成事务
+     * @apiName getDoneAffairs
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     *
+     * @apiSuccess {String} docs 所有事务的JSONArray字符串形式
+     */
     getDoneAffairs(req, resp){
         console.log('路由getDoneAffairs成功');
         var email = req.query.email;
@@ -21,6 +39,16 @@ module.exports = {
             resp.send(docs);
         })
     },
+    /**
+     * @api {get} /getOneAffair? 请求一件事务
+     * @apiName getOneAffair
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     * @apiParam {String} affairID 事务ID
+     *
+     * @apiSuccess {String} doc 该事务的JSONObject字符串形式
+     */
     getOneAffair(req, resp){
         console.log('路由getOneAffair成功');
         var email = req.query.email;
@@ -30,6 +58,15 @@ module.exports = {
             resp.send(doc);
         })
     },
+    /**
+     * @api {get} /deleteOneAffair? 删除一件事务
+     * @apiName deleteOneAffair
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     * @apiParam {String} affairID 事务ID
+     *
+     */
     deleteOneAffair(req, resp){
         console.log('路由deleteOneAffair成功');
 
@@ -43,6 +80,19 @@ module.exports = {
 
 
     // POST
+    /**
+     * @api {post} /addOneAffair 增加一件事务
+     * @apiName addOneAffair
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     * @apiParam {String} affairID 事务ID
+     * @apiParam {String} title 事务标题
+     * @apiParam {String} content 事务内容
+     * @apiParam {String} date 事务日期
+     * @apiParam {Boolean} status 事务状态
+     *
+     */
     addOneAffair(req, resp){
         console.log('路由addOneAffair成功');
         var email = req.body.email;
@@ -59,6 +109,18 @@ module.exports = {
             }
         })
     },
+    /**
+     * @api {post} /updateOneAffair 更新一件事务
+     * @apiName updateOneAffair
+     * @apiGroup Affair
+     *
+     * @apiParam {String} email 用户邮箱
+     * @apiParam {String} affairID 事务ID
+     * @apiParam {String} title 事务标题（可选）
+     * @apiParam {String} content 事务内容（可选）
+     * @apiParam {Boolean} status 事务状态（可选）
+     *
+     */
     updateOneAffair(req, resp){
         console.log('路由updateOneAffair成功');
 
