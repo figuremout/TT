@@ -38,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -141,12 +142,8 @@ public class HomeFragment extends Fragment
             Thread getAllAffairsThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
-                        affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
+                    affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
                 }
             });
             getAllAffairsThread.start();
@@ -211,12 +208,8 @@ public class HomeFragment extends Fragment
         Thread getOneAffairThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    affair_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
-                    affair[0] = myHttp.getJsonObject(affair_str[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                affair_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
+                affair[0] = myHttp.getJsonObject(affair_str[0]);
             }
         });
         getOneAffairThread.start();
@@ -294,11 +287,7 @@ public class HomeFragment extends Fragment
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=true");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=true");
                         }
                     });
                     updateOneAffairThread.start();
@@ -316,11 +305,7 @@ public class HomeFragment extends Fragment
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=false");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=false");
                         }
                     });
                     updateOneAffairThread.start();

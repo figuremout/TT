@@ -26,11 +26,13 @@ import com.example.tt.util.DateUtil;
 import com.example.tt.util.myHttp;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import static com.example.tt.util.DateUtil.differentDays;
@@ -111,11 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
         Thread getUsernameThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
             }
         });
         getUsernameThread.start();
@@ -125,6 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
+
         edit_username.setBackground(null); // 去除下划线
 
         // 初始化雷达图
@@ -184,11 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Thread updateUsernameThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateUsername", "email="+currentEmail+"&username="+new_username);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateUsername", "email="+currentEmail+"&username="+new_username);
                         }
                     });
                     updateUsernameThread.start();
@@ -205,11 +200,7 @@ public class ProfileActivity extends AppCompatActivity {
                     Thread getUsernameThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
                         }
                     });
                     getUsernameThread.start();
@@ -236,6 +227,15 @@ public class ProfileActivity extends AppCompatActivity {
                 // 震动
                 vibrator.vibrate(300);
                 return true;// 过滤单击事件，避免长按时长按事件、单击事件都触发
+            }
+        });
+
+        portrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String[] reqs = {"/getUsername?email=" + currentEmail, "", "/login", "email="+currentEmail+"&pwd="+"123"};
+                ArrayList<String> resps = myHttp.httpThread(reqs);
+                Toast.makeText(ProfileActivity.this, resps.get(0)+resps.get(1), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -269,11 +269,7 @@ public class ProfileActivity extends AppCompatActivity {
         Thread getSignDateThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    signDate[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                signDate[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
             }
         });
         getSignDateThread.start();
@@ -310,11 +306,7 @@ public class ProfileActivity extends AppCompatActivity {
         Thread getSignDateThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    last_sign_date_str[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                last_sign_date_str[0] = myHttp.getHTTPReq("/getOneSignDate?email="+currentEmail);
             }
         });
         getSignDateThread.start();
@@ -336,11 +328,7 @@ public class ProfileActivity extends AppCompatActivity {
         Thread getSignTimesThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    times[0] = Integer.parseInt(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                times[0] = Integer.parseInt(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
             }
         });
         getSignTimesThread.start();
@@ -356,11 +344,7 @@ public class ProfileActivity extends AppCompatActivity {
             Thread updateSignTimesThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=true");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=true");
                 }
             });
             updateSignTimesThread.start();
@@ -375,11 +359,7 @@ public class ProfileActivity extends AppCompatActivity {
             Thread updateSignTimesThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=false");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    myHttp.postHTTPReq("/updateSignTimes", "email="+currentEmail+"&isInc=false");
                 }
             });
             updateSignTimesThread.start();
@@ -387,11 +367,7 @@ public class ProfileActivity extends AppCompatActivity {
         Thread updateSignDateThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    myHttp.postHTTPReq("/updateOneSignDate", "email="+currentEmail+"&signDate="+date_str);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                myHttp.postHTTPReq("/updateOneSignDate", "email="+currentEmail+"&signDate="+date_str);
             }
         });
         updateSignDateThread.start();
@@ -416,14 +392,10 @@ public class ProfileActivity extends AppCompatActivity {
         Thread updateSignTimesThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    signTimes[0] = Double.parseDouble(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
-                    affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
-                    affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
-                    shareTimes[0] = Double.parseDouble(myHttp.getHTTPReq("getOneShareTimes?email="+currentEmail));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                signTimes[0] = Double.parseDouble(myHttp.getHTTPReq("/getOneSignTimes?email="+currentEmail));
+                affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
+                affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
+                shareTimes[0] = Double.parseDouble(myHttp.getHTTPReq("/getOneShareTimes?email="+currentEmail));
             }
         });
         updateSignTimesThread.start();

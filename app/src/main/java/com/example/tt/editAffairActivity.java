@@ -93,12 +93,8 @@ public class editAffairActivity extends AppCompatActivity {
         Thread getOneAffairThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
-                    doc[0] = myHttp.getJsonObject(doc_str[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
+                doc[0] = myHttp.getJsonObject(doc_str[0]);
             }
         });
         getOneAffairThread.start();
@@ -159,11 +155,7 @@ public class editAffairActivity extends AppCompatActivity {
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=true");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=true");
                         }
                     });
                     updateOneAffairThread.start();
@@ -172,11 +164,7 @@ public class editAffairActivity extends AppCompatActivity {
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=false");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+"&status=false");
                         }
                     });
                     updateOneAffairThread.start();
@@ -258,12 +246,8 @@ public class editAffairActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // 结束编辑页面活动时保存内容
-                try {
-                    myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+
-                            "&title="+editTitle.getText().toString()+"&content="+editContent.getText().toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+currentAffairID+
+                        "&title="+editTitle.getText().toString()+"&content="+editContent.getText().toString());
             }
         }).start();
         super.onPause();

@@ -84,13 +84,9 @@ public class ShowMdActivity extends AppCompatActivity {
         Thread getOneAffairThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
-                    username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
-                    doc[0] = myHttp.getJsonObject(doc_str[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                doc_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+currentAffairID);
+                username[0] = myHttp.getHTTPReq("/getUsername?email="+currentEmail);
+                doc[0] = myHttp.getJsonObject(doc_str[0]);
             }
         });
         getOneAffairThread.start();

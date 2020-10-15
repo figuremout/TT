@@ -126,12 +126,8 @@ public class OutdatedFragment extends Fragment {
             Thread getAllAffairsThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
-                        affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    affairList_str[0] = myHttp.getHTTPReq("/getAllAffairs?email="+currentEmail);
+                    affairsArray[0] = myHttp.getJsonArray(affairList_str[0]);
                 }
             });
             getAllAffairsThread.start();
@@ -186,12 +182,8 @@ public class OutdatedFragment extends Fragment {
         Thread getOneAffairThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    affair_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
-                    affair[0] = myHttp.getJsonObject(affair_str[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                affair_str[0] = myHttp.getHTTPReq("/getOneAffair?email="+currentEmail+"&affairID="+affairID);
+                affair[0] = myHttp.getJsonObject(affair_str[0]);
             }
         });
         getOneAffairThread.start();
@@ -269,11 +261,7 @@ public class OutdatedFragment extends Fragment {
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=true");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=true");
                         }
                     });
                     updateOneAffairThread.start();
@@ -292,11 +280,7 @@ public class OutdatedFragment extends Fragment {
                     Thread updateOneAffairThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            try {
-                                myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=false");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            myHttp.postHTTPReq("/updateOneAffair", "email="+currentEmail+"&affairID="+affairID+"&status=false");
                         }
                     });
                     updateOneAffairThread.start();

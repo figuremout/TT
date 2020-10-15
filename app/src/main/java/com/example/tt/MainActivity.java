@@ -195,11 +195,7 @@ public class MainActivity extends AppCompatActivity {
             Thread loginThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        myHttp.postHTTPReq("/increaseShareTimes", "email="+currentEmail);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    myHttp.postHTTPReq("/increaseShareTimes", "email="+currentEmail);
                 }
             });
             loginThread.start();
@@ -339,11 +335,7 @@ public class MainActivity extends AppCompatActivity {
         Thread getUsernameThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
             }
         });
         getUsernameThread.start();

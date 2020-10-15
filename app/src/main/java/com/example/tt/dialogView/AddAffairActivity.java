@@ -107,18 +107,14 @@ public class AddAffairActivity extends AppCompatActivity {
                 Thread addAffairThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            if(currentAffairDate.trim().length() == 0){
-                                // 若未手动选择日期，获取当天日期并存储
-                                String affairDate = date_str.split(" ")[0];
-                                myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
-                                        "&date="+affairDate);
-                            }else{
-                                myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
-                                        "&date="+currentAffairDate);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if(currentAffairDate.trim().length() == 0){
+                            // 若未手动选择日期，获取当天日期并存储
+                            String affairDate = date_str.split(" ")[0];
+                            myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
+                                    "&date="+affairDate);
+                        }else{
+                            myHttp.postHTTPReq("/addOneAffair", "email="+currentEmail+"&affairID="+date_str+"&title="+affairTitle+
+                                    "&date="+currentAffairDate);
                         }
                     }
                 });

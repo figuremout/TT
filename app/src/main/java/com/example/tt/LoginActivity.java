@@ -116,11 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 Thread loginThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/login", "email="+email+"&pwd="+pwd));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/login", "email="+email+"&pwd="+pwd));
                     }
                 });
                 loginThread.start();
@@ -180,12 +176,8 @@ public class LoginActivity extends AppCompatActivity {
                 Thread registerThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/register", "username="+username+"&email="+email+"&pwd="+pwd));
-                            myHttp.postHTTPReq("/initOneRecord", "email="+email);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        isSuccess[0] = Boolean.parseBoolean(myHttp.postHTTPReq("/register", "username="+username+"&email="+email+"&pwd="+pwd));
+                        myHttp.postHTTPReq("/initOneRecord", "email="+email);
                     }
                 });
                 registerThread.start();
@@ -333,11 +325,7 @@ public class LoginActivity extends AppCompatActivity {
         Thread getUsernameThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                username[0] = myHttp.getHTTPReq("/getUsername?email="+email);
             }
         });
         getUsernameThread.start();
