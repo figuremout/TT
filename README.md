@@ -1,12 +1,12 @@
 # TT (TickTock)
-> My first android app.
-> > An android time-manager for minimalist.
+> 我的第一款Android应用（Web branch）
 
 This App is **For Learn & Communication Purposes Only**.
 
 ## Open Source [#](#)
 Under MIT License.
-- Android Studio Project: [GitHub Repo](https://github.com/githubzjm/TT)
+- 客户端代码: [GitHub Repo](https://github.com/githubzjm/TT)
+- 服务端代码: [GitHub Repo](https://github.com/githubzjm/TT/tree/web/tt-server)
 
 ## Download APK [#](#)
 - Android 5.0 (Lollipop) +
@@ -16,6 +16,19 @@ Under MIT License.
 |--|--|--|--|
 |Debug|[v1.2.0](http://www.zjmpage.com/TT/TT_debug1.2.0.apk)|*2020.10.05*|web version|
 |||
+
+## UI
+<img src="./img/00.jpg"/>
+<img src="./img/01.jpg"/>
+<img src="./img/1.jpg"/>
+<img src="./img/2.jpg"/>
+<img src="./img/3.jpg"/>
+<img src="./img/4.jpg"/>
+<img src="./img/5.jpg"/>
+<img src="./img/6.jpg"/>
+<img src="./img/7.jpg"/>
+<img src="./img/8.jpg"/>
+<img src="./img/9.jpg"/>
 
 ## TODO List [#](#)
 - [ ] 设置时间、铃声、重复提醒
