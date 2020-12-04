@@ -18,17 +18,17 @@ Under MIT License.
 |||
 
 ## UI
-<img src="./img/00.jpg"/>
-<img src="./img/01.jpg"/>
-<img src="./img/1.jpg"/>
-<img src="./img/2.jpg"/>
-<img src="./img/3.jpg"/>
-<img src="./img/4.jpg"/>
-<img src="./img/5.jpg"/>
-<img src="./img/6.jpg"/>
-<img src="./img/7.jpg"/>
-<img src="./img/8.jpg"/>
-<img src="./img/9.jpg"/>
+<img src="./img/00.jpg" width="30%"/>
+<img src="./img/01.jpg" width="30%"/>
+<img src="./img/1.jpg" width="30%"/>
+<img src="./img/2.jpg" width="30%"/>
+<img src="./img/3.jpg" width="30%"/>
+<img src="./img/4.jpg" width="30%"/>
+<img src="./img/5.jpg" width="30%"/>
+<img src="./img/6.jpg" width="30%"/>
+<img src="./img/7.jpg" width="30%"/>
+<img src="./img/8.jpg" width="30%"/>
+<img src="./img/9.jpg" width="30%"/>
 
 ## TODO List [#](#)
 - [ ] 设置时间、铃声、重复提醒

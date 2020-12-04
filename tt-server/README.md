@@ -1,4 +1,5 @@
-# SharedPreferences
+# 服务端
+## 本地持久化存储数据：SharedPreferences
  <!-- * key: email#username value(String): email对应的用户名
  * key: email#pwd value(String): email对应的密码 -->
  * key: currentEmail value(String): 当前登录账号的邮箱
@@ -16,7 +17,7 @@
  * key: currentAffairDate value(String): 当前编辑事务的日期，用于人工选择日期界面暂时存储
  * key: currentAffairID value(String): 当前点击事务项的ID，在点击事务项按钮时设置，被打开的事务编辑界面获取
 
-# MongoDB
+## 服务端存储数据：MongoDB
 ## DB: tt
 ### Collections: users
 #### Docs
