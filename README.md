@@ -14,7 +14,8 @@ Under MIT License.
 
 |Type|Version|Time|Description|
 |--|--|--|--|
-|Debug|[v1.2.0](http://www.zjmpage.com/TT/TT_debug1.2.0.apk)|*2020.10.05*|web version|
+|Debug|[v1.1.0](./release/TT_debug1.1.0.apk)|*2020.07.28*|*|
+|Debug|[v1.2.0](./release/TT_debug1.2.0.apk)|*2020.10.05*|web version|
 |||
 
 ## UI
